@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security report
+    url: https://github.com/Zoltan-66/binge-skirting-board-web/security
+    about: Report vulnerabilities privately rather than through a public Issue.
