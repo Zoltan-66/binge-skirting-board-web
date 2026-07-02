@@ -1,0 +1,42 @@
+name: Product content
+description: Add, verify, localise, or correct product content.
+title: "[Content]: "
+labels: ["type: content", "status: triage"]
+body:
+  - type: input
+    id: product
+    attributes:
+      label: Product code or category
+      placeholder: WS-TG or Surface-Mounted Aluminum
+    validations:
+      required: true
+  - type: textarea
+    id: change
+    attributes:
+      label: Requested change
+    validations:
+      required: true
+  - type: dropdown
+    id: verification
+    attributes:
+      label: Claim verification state
+      options:
+        - Verified by approved source
+        - Provisional — internal only
+        - Omit until evidence is available
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Source evidence
+      description: Link or identify the approved drawing, report, photo set, or factory record.
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      value: |
+        - [ ] English copy reviewed
+        - [ ] Images approved and localised
+        - [ ] Technical claims verified or omitted
+        - [ ] Metadata and alt text added

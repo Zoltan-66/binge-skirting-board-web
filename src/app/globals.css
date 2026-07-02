@@ -1,0 +1,267 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* ─── BINGE Brand Colors ─── */
+  --binge-orange:       #F28C00;
+  --binge-dark:         #171B20;
+  --binge-warm-bg:      #F7F5F0;
+  --binge-card-bg:      #F7F7F7;
+  --binge-white:        #FFFFFF;
+  --binge-text-primary: #222222;
+  --binge-text-body:    #4A4A4A;
+  --binge-text-muted:   #747474;
+  --binge-border:       #E3E3E3;
+
+  /* ─── BINGE Typography ─── */
+  --binge-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --binge-weight-display: 700;
+  --binge-weight-body:    300;
+  --binge-weight-button:  700;
+  --binge-tracking-label:  0.1em;
+  --binge-tracking-button: 0.07em;
+
+  /* ─── BINGE Type Scale ─── */
+  --binge-size-display-xl: clamp(40px, 5vw,   64px);
+  --binge-size-display-lg: clamp(28px, 3.5vw, 48px);
+  --binge-size-display-md: clamp(24px, 2.8vw, 36px);
+  --binge-size-display-sm: clamp(20px, 2.2vw, 28px);
+  --binge-size-title-lg:   24px;
+  --binge-size-title-md:   20px;
+  --binge-size-body-lg:    18px;
+  --binge-size-body:       16px;
+  --binge-size-label:      13px;
+  --binge-size-button:     13px;
+  --binge-size-caption:    12px;
+
+  /* ─── BINGE Line Heights ─── */
+  --binge-lh-display: 1.05;
+  --binge-lh-heading: 1.15;
+  --binge-lh-body:    1.65;
+
+  /* ─── BINGE Layout ─── */
+  --binge-nav-h:       64px;
+  --binge-content-max: 1440px;
+  --binge-section-v:   clamp(56px, 8vw, 96px);
+  --binge-pad-h:       clamp(24px, 5.5vw, 80px);
+  --binge-radius:      0px;
+
+  /* ─── Theme variable overrides for BINGE ─── */
+  --font-size:             16px;
+  --background:            #FFFFFF;
+  --foreground:            #222222;
+  --card:                  #F7F7F7;
+  --card-foreground:       #222222;
+  --popover:               #FFFFFF;
+  --popover-foreground:    #222222;
+  --primary:               #F28C00;
+  --primary-foreground:    #FFFFFF;
+  --secondary:             #F7F5F0;
+  --secondary-foreground:  #222222;
+  --muted:                 #F7F5F0;
+  --muted-foreground:      #747474;
+  --accent:                #F7F5F0;
+  --accent-foreground:     #222222;
+  --destructive:           #d4183d;
+  --destructive-foreground:#ffffff;
+  --border:                #E3E3E3;
+  --input:                 transparent;
+  --input-background:      #F7F7F7;
+  --switch-background:     #cbced4;
+  --font-weight-medium:    500;
+  --font-weight-normal:    400;
+  --ring:                  #F28C00;
+  --radius:                0px;
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6   0.118 184.704);
+  --chart-3: oklch(0.398 0.07  227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar:                  #F7F5F0;
+  --sidebar-foreground:       #222222;
+  --sidebar-primary:          #F28C00;
+  --sidebar-primary-foreground:#ffffff;
+  --sidebar-accent:           #F7F7F7;
+  --sidebar-accent-foreground:#222222;
+  --sidebar-border:           #E3E3E3;
+  --sidebar-ring:             #F28C00;
+}
+
+.dark {
+  --background:        #171B20;
+  --foreground:        #ffffff;
+  --card:              #1E2329;
+  --card-foreground:   #ffffff;
+  --popover:           #171B20;
+  --popover-foreground:#ffffff;
+  --primary:           #F28C00;
+  --primary-foreground:#ffffff;
+  --secondary:         #2A2E35;
+  --secondary-foreground:#ffffff;
+  --muted:             #2A2E35;
+  --muted-foreground:  #747474;
+  --accent:            #2A2E35;
+  --accent-foreground: #ffffff;
+  --destructive:       oklch(0.396 0.141 25.723);
+  --destructive-foreground: oklch(0.637 0.237 25.331);
+  --border:            rgba(255,255,255,0.1);
+  --input:             #2A2E35;
+  --ring:              #F28C00;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17  162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar:                  #1E2329;
+  --sidebar-foreground:       #ffffff;
+  --sidebar-primary:          #F28C00;
+  --sidebar-primary-foreground:#ffffff;
+  --sidebar-accent:           #2A2E35;
+  --sidebar-accent-foreground:#ffffff;
+  --sidebar-border:           rgba(255,255,255,0.1);
+  --sidebar-ring:             #F28C00;
+}
+
+@theme inline {
+  /* ─── Standard Tailwind token mappings ─── */
+  --color-background:              var(--background);
+  --color-foreground:              var(--foreground);
+  --color-card:                    var(--card);
+  --color-card-foreground:         var(--card-foreground);
+  --color-popover:                 var(--popover);
+  --color-popover-foreground:      var(--popover-foreground);
+  --color-primary:                 var(--primary);
+  --color-primary-foreground:      var(--primary-foreground);
+  --color-secondary:               var(--secondary);
+  --color-secondary-foreground:    var(--secondary-foreground);
+  --color-muted:                   var(--muted);
+  --color-muted-foreground:        var(--muted-foreground);
+  --color-accent:                  var(--accent);
+  --color-accent-foreground:       var(--accent-foreground);
+  --color-destructive:             var(--destructive);
+  --color-destructive-foreground:  var(--destructive-foreground);
+  --color-border:                  var(--border);
+  --color-input:                   var(--input);
+  --color-input-background:        var(--input-background);
+  --color-switch-background:       var(--switch-background);
+  --color-ring:                    var(--ring);
+  --color-chart-1:                 var(--chart-1);
+  --color-chart-2:                 var(--chart-2);
+  --color-chart-3:                 var(--chart-3);
+  --color-chart-4:                 var(--chart-4);
+  --color-chart-5:                 var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar:                     var(--sidebar);
+  --color-sidebar-foreground:          var(--sidebar-foreground);
+  --color-sidebar-primary:             var(--sidebar-primary);
+  --color-sidebar-primary-foreground:  var(--sidebar-primary-foreground);
+  --color-sidebar-accent:              var(--sidebar-accent);
+  --color-sidebar-accent-foreground:   var(--sidebar-accent-foreground);
+  --color-sidebar-border:              var(--sidebar-border);
+  --color-sidebar-ring:                var(--sidebar-ring);
+
+  /* ─── BINGE brand tokens exposed as Tailwind classes ─── */
+  --color-binge-orange:    var(--binge-orange);
+  --color-binge-dark:      var(--binge-dark);
+  --color-binge-warm:      var(--binge-warm-bg);
+  --color-binge-card:      var(--binge-card-bg);
+  --color-binge-text:      var(--binge-text-primary);
+  --color-binge-body-text: var(--binge-text-body);
+  --color-binge-muted:     var(--binge-text-muted);
+  --color-binge-border:    var(--binge-border);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    box-sizing: border-box;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--binge-font);
+  }
+
+  html {
+    font-size: var(--font-size);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1 {
+    font-family: var(--binge-font);
+    font-size: var(--binge-size-display-xl);
+    font-weight: var(--binge-weight-display);
+    line-height: var(--binge-lh-display);
+    color: var(--binge-text-primary);
+  }
+
+  h2 {
+    font-family: var(--binge-font);
+    font-size: var(--binge-size-display-lg);
+    font-weight: var(--binge-weight-display);
+    line-height: var(--binge-lh-display);
+    color: var(--binge-text-primary);
+  }
+
+  h3 {
+    font-family: var(--binge-font);
+    font-size: var(--binge-size-title-lg);
+    font-weight: var(--binge-weight-display);
+    line-height: var(--binge-lh-heading);
+    color: var(--binge-text-primary);
+  }
+
+  h4 {
+    font-family: var(--binge-font);
+    font-size: var(--binge-size-title-md);
+    font-weight: var(--binge-weight-display);
+    line-height: var(--binge-lh-heading);
+    color: var(--binge-text-primary);
+  }
+
+  p {
+    font-family: var(--binge-font);
+    font-size: var(--binge-size-body);
+    font-weight: var(--binge-weight-body);
+    line-height: var(--binge-lh-body);
+    color: var(--binge-text-body);
+  }
+
+  button {
+    font-family: var(--binge-font);
+    font-size: var(--binge-size-button);
+    font-weight: var(--binge-weight-button);
+    border-radius: var(--binge-radius);
+  }
+
+  a {
+    color: inherit;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+}
+
+.binge-site-shell {
+  min-width: 320px;
+  background: var(--binge-white);
+}
+
+:focus-visible {
+  outline: 2px solid var(--binge-orange);
+  outline-offset: 3px;
+}
