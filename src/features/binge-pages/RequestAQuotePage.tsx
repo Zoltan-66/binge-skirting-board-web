@@ -138,40 +138,41 @@ function SuccessState({ onReset }: { onReset: () => void }) {
           fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-label)', fontWeight: 700,
           color: 'var(--binge-orange)', letterSpacing: 'var(--binge-tracking-label)', textTransform: 'uppercase',
           display: 'block', marginBottom: '16px',
-        }}>Pre-launch Form Preview</span>
+        }}>RFQ Submitted</span>
 
         <h1 style={{
           fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-display-sm)', fontWeight: 700,
           color: 'var(--binge-text-primary)', lineHeight: 'var(--binge-lh-heading)',
           margin: '0 0 20px', letterSpacing: '-0.02em',
         }}>
-          Validation complete. Nothing was sent.
+          Request received.
         </h1>
 
         <p style={{
           fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-body-lg)', fontWeight: 300,
           color: 'var(--binge-text-body)', lineHeight: 'var(--binge-lh-body)', margin: '0 0 12px',
         }}>
-          This website is still in test mode. Your entries were checked in this browser, but no enquiry,
-          contact details or attachment was transmitted to BINGE.
+          Thanks for sending your project requirements. BINGE will review the RFQ details and follow up
+          by email or WhatsApp if the team needs clarification.
         </p>
 
         <p style={{
           fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-body)', fontWeight: 300,
           color: 'var(--binge-text-muted)', lineHeight: 'var(--binge-lh-body)', margin: '0 0 40px',
         }}>
-          Real submission will be enabled after the company domain and receiving channel are configured.
+          Uploaded reference files are noted in the enquiry metadata. If the team needs the original drawing,
+          they will ask you to share it through a secure channel.
         </p>
 
         {/* Next steps */}
         <div style={{ borderTop: '1px solid var(--binge-border)', borderBottom: '1px solid var(--binge-border)', padding: '28px 0', marginBottom: '32px', textAlign: 'left' }}>
           <p style={{ fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-label)', fontWeight: 700, color: 'var(--binge-text-muted)', letterSpacing: 'var(--binge-tracking-label)', textTransform: 'uppercase', margin: '0 0 16px' }}>
-            What this preview checked
+            What happens next
           </p>
           {[
-            'Required contact and project fields passed validation.',
-            'The selected catalogue product was carried into the RFQ.',
-            'Sensitive fields and attachments were not saved or transmitted.',
+            'Your contact and project details were sent to BINGE.',
+            'The selected product, quantity and logistics details were included.',
+            'The sales team will review the request and reply with the next step.',
           ].map((step, i) => (
             <div key={i} style={{ display: 'flex', gap: '12px', marginBottom: i < 2 ? '12px' : 0 }}>
               <span style={{ fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-caption)', fontWeight: 700, color: 'var(--binge-orange)', flexShrink: 0, marginTop: '2px' }}>0{i + 1}</span>
@@ -209,6 +210,7 @@ function SuccessState({ onReset }: { onReset: () => void }) {
 export function RequestAQuotePage() {
   const [submitted, setSubmitted]     = useState(false);
   const [submitting, setSubmitting]   = useState(false);
+  const [submitError, setSubmitError] = useState('');
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [uploadError, setUploadError]   = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -268,12 +270,35 @@ export function RequestAQuotePage() {
     if (file) handleFile(file);
   };
 
-  const onSubmit = async () => {
+  const onSubmit = async (data: QuoteFormData) => {
     setSubmitting(true);
-    await new Promise(r => setTimeout(r, 450));
-    window.localStorage.removeItem(RFQ_DRAFT_STORAGE_KEY);
-    setSubmitting(false);
-    setSubmitted(true);
+    setSubmitError('');
+
+    try {
+      const response = await fetch('/api/rfq', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...data,
+          source: new URLSearchParams(window.location.search).get('source') || 'website',
+          attachment: uploadedFile
+            ? { name: uploadedFile.name, size: uploadedFile.size, type: uploadedFile.type }
+            : undefined,
+        }),
+      });
+      const result = await response.json().catch(() => ({})) as { error?: string };
+
+      if (!response.ok) {
+        throw new Error(result.error || 'The RFQ could not be submitted. Please try again.');
+      }
+
+      window.localStorage.removeItem(RFQ_DRAFT_STORAGE_KEY);
+      setSubmitted(true);
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : 'The RFQ could not be submitted. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (submitted) {
@@ -311,8 +336,8 @@ export function RequestAQuotePage() {
                 fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-body-lg)', fontWeight: 300,
                 color: 'rgba(255,255,255,0.6)', lineHeight: 'var(--binge-lh-body)', margin: 0,
               }}>
-                Preview the information buyers will provide for a quotation. Submission is currently disabled
-                while the company domain and receiving channel are being prepared.
+                Send your product, quantity, finish and logistics requirements to the BINGE team so they
+                can prepare the right quotation path for your project.
               </p>
             </div>
           </div>
@@ -332,8 +357,9 @@ export function RequestAQuotePage() {
           </p>
 
           <div role="status" style={{ border: '1px solid var(--binge-orange)', background: 'var(--binge-warm-bg)', padding: '16px 18px', margin: '-20px 0 40px', color: 'var(--binge-text-body)', lineHeight: 1.6 }}>
-            <strong style={{ color: 'var(--binge-text-primary)' }}>Pre-launch test mode:</strong>{' '}
-            this form validates locally but does not send data. Only non-sensitive project selections are saved as a browser draft; contact details, messages, consent and files are never persisted.
+            <strong style={{ color: 'var(--binge-text-primary)' }}>Secure RFQ submission:</strong>{' '}
+            required details are sent to BINGE for follow-up. Only non-sensitive project selections are saved
+            as a browser draft before submission; contact details, messages, consent and files are never persisted locally.
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -639,7 +665,7 @@ export function RequestAQuotePage() {
                   />
                   <span style={{ fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-body)', fontWeight: 300, color: 'var(--binge-text-body)', lineHeight: 1.6 }}>
                     I agree to BINGE&apos;s{' '}
-                    pre-launch privacy notice and understand that this test form does not transmit my contact details.{' '}
+                    privacy notice and agree that BINGE may use these details to respond to my RFQ.{' '}
                     {reqStar}
                   </span>
                 </label>
@@ -662,11 +688,16 @@ export function RequestAQuotePage() {
                     transition: 'background-color 0.15s',
                   }}
                 >
-                  {submitting ? 'Checking…' : 'Preview Submission'}
+                  {submitting ? 'Submitting...' : 'Submit RFQ'}
                 </button>
                 <p style={{ fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-caption)', fontWeight: 300, color: 'var(--binge-text-muted)', lineHeight: 1.5, margin: 0, maxWidth: '320px' }}>
-                  Test mode only: no enquiry is sent and no contact details are stored.
+                  Your enquiry is sent to BINGE for quotation follow-up.
                 </p>
+                {submitError && (
+                  <p role="alert" style={{ ...errorMsg, flexBasis: '100%', marginTop: 0 }}>
+                    {submitError}
+                  </p>
+                )}
               </div>
             </div>
           </form>

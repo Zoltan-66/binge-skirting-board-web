@@ -42,6 +42,21 @@ pnpm dev
 
 Open <http://localhost:3000>.
 
+## RFQ to Zoho CRM
+
+The `/api/rfq` endpoint submits validated RFQs to Zoho CRM Leads. Configure these values locally in `.env.local` and in production as Cloudflare Pages environment variables or secrets:
+
+```bash
+ZOHO_CLIENT_ID=
+ZOHO_CLIENT_SECRET=
+ZOHO_REFRESH_TOKEN=
+ZOHO_ACCOUNTS_URL=https://accounts.zoho.com
+ZOHO_API_DOMAIN=https://www.zohoapis.com
+ZOHO_LEADS_MODULE=Leads
+```
+
+Use the Zoho accounts and API domains for the CRM account region, for example `.com`, `.eu`, or `.com.au`.
+
 ## Validation
 
 ```bash
