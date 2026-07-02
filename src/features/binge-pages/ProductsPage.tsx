@@ -4,6 +4,8 @@ import { useState, useMemo } from 'react';
 import { Link } from '@/lib/router-compat';
 import { ChevronRight, ChevronDown, X, ArrowRight } from 'lucide-react';
 import { PRODUCT_CATALOGUE, type Application, type Category, type Installation, type Material, type Product } from '@/data/product-catalogue';
+import { useI18n } from '@/lib/i18n';
+import { translateCopy } from '@/lib/localized-copy';
 
 // ─── Filter Options ───────────────────────────────────────────────────────────
 
@@ -19,6 +21,7 @@ const APPLICATIONS:  ('All' | Application)[]   = ['All', 'Residential', 'Hospita
 function FilterSelect({ label, value, options, onChange }: {
   label: string; value: string; options: string[]; onChange: (v: string) => void;
 }) {
+  const { locale } = useI18n();
   const active = value !== 'All';
   return (
     <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
@@ -43,8 +46,8 @@ function FilterSelect({ label, value, options, onChange }: {
           minWidth: '172px',
         } as React.CSSProperties}
       >
-        <option value="All">{label}: All</option>
-        {options.filter(o => o !== 'All').map(o => <option key={o} value={o}>{o}</option>)}
+        <option value="All">{translateCopy(label, locale)}: {translateCopy('All', locale)}</option>
+        {options.filter(o => o !== 'All').map(o => <option key={o} value={o}>{translateCopy(o, locale)}</option>)}
       </select>
       <div style={{
         position: 'absolute', right: '12px', pointerEvents: 'none',
@@ -60,17 +63,18 @@ function FilterSelect({ label, value, options, onChange }: {
 // ─── ProductCard ──────────────────────────────────────────────────────────────
 
 function ProductCard({ p }: { p: Product }) {
+  const { locale } = useI18n();
   const detailHref = `/products/${p.slug}`;
 
   return (
     <div className="group" data-binge-card style={{ backgroundColor: 'var(--binge-white)' }}>
       <Link
         to={detailHref}
-        aria-label={`View ${p.name}`}
+        aria-label={`${translateCopy('View Product', locale)} ${translateCopy(p.name, locale)}`}
         style={{ display: 'block', overflow: 'hidden', aspectRatio: '4 / 3', backgroundColor: 'var(--binge-card-bg)' }}
       >
         <img
-          src={p.img} alt={p.alt}
+          src={p.img} alt={translateCopy(p.alt, locale)}
           style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.45s ease' }}
           className="group-hover:scale-105"
         />
@@ -89,14 +93,14 @@ function ProductCard({ p }: { p: Product }) {
           fontWeight: 700, color: 'var(--binge-text-primary)',
           lineHeight: 1.25, margin: '0 0 8px',
         }}>
-          {p.name}
+          {translateCopy(p.name, locale)}
         </h3>
         <p style={{
           fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-body)',
           fontWeight: 300, color: 'var(--binge-text-body)',
           lineHeight: 'var(--binge-lh-body)', margin: '0 0 16px',
         }}>
-          {p.desc}
+          {translateCopy(p.desc, locale)}
         </p>
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '16px' }}>
           {[p.material, p.installation].map(tag => (
@@ -106,7 +110,7 @@ function ProductCard({ p }: { p: Product }) {
               backgroundColor: 'var(--binge-white)', border: '1px solid var(--binge-border)',
               padding: '2px 8px',
             }}>
-              {tag}
+              {translateCopy(tag, locale)}
             </span>
           ))}
         </div>
@@ -116,7 +120,7 @@ function ProductCard({ p }: { p: Product }) {
             letterSpacing: 'var(--binge-tracking-label)', textTransform: 'uppercase',
             textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px',
           }}>
-            View Product <ArrowRight size={13} />
+            {translateCopy('View Product', locale)} <ArrowRight size={13} />
           </Link>
       </div>
     </div>
@@ -126,6 +130,7 @@ function ProductCard({ p }: { p: Product }) {
 // ─── ProductsPage ─────────────────────────────────────────────────────────────
 
 export function ProductsPage() {
+  const { locale } = useI18n();
   const [activeCat,          setActiveCat]          = useState<'All' | Category>('All');
   const [filterMaterial,     setFilterMaterial]     = useState<'All' | Material>('All');
   const [filterInstallation, setFilterInstallation] = useState<'All' | Installation>('All');
@@ -158,14 +163,14 @@ export function ProductsPage() {
               fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-caption)',
               fontWeight: 400, color: 'var(--binge-text-muted)', textDecoration: 'none',
             }}>
-              Home
+              {translateCopy('Home', locale)}
             </Link>
             <ChevronRight size={12} style={{ color: 'var(--binge-border)', flexShrink: 0 }} />
             <span style={{
               fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-caption)',
               fontWeight: 400, color: 'var(--binge-text-primary)',
             }}>
-              Products
+              {translateCopy('Products', locale)}
             </span>
           </div>
 
@@ -178,14 +183,14 @@ export function ProductsPage() {
                 letterSpacing: 'var(--binge-tracking-label)', textTransform: 'uppercase',
                 display: 'block', marginBottom: '14px',
               }}>
-                Product Catalogue
+                {translateCopy('Product Catalogue', locale)}
               </span>
               <h1 style={{
                 fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-display-md)',
                 fontWeight: 700, color: 'var(--binge-text-primary)',
                 lineHeight: 'var(--binge-lh-heading)', margin: 0, letterSpacing: '-0.02em',
               }}>
-                Architectural Skirting &amp; Profile Systems
+                {translateCopy('Architectural Skirting & Profile Systems', locale)}
               </h1>
             </div>
             <div style={{ display: 'flex', alignItems: 'flex-end' }}>
@@ -194,10 +199,7 @@ export function ProductsPage() {
                 fontWeight: 300, color: 'var(--binge-text-body)',
                 lineHeight: 'var(--binge-lh-body)', margin: 0,
               }}>
-                Our complete range of aluminium, solid wood, stainless steel and
-                composite profiles — manufactured for professional specification.
-                Request technical drawings, order samples or submit an RFQ for any
-                system in this catalogue.
+                {translateCopy('Our complete range of aluminium, solid wood, stainless steel and composite profiles — manufactured for professional specification. Request technical drawings, order samples or submit an RFQ for any system in this catalogue.', locale)}
               </p>
             </div>
           </div>
@@ -210,7 +212,7 @@ export function ProductsPage() {
               letterSpacing: 'var(--binge-tracking-label)', textTransform: 'uppercase',
               flexShrink: 0, marginRight: '4px',
             }}>
-              Filter by:
+              {translateCopy('Filter by:', locale)}
             </span>
             <FilterSelect label="Material"     value={filterMaterial}     options={MATERIALS}     onChange={v => setFilterMaterial(v as 'All' | Material)} />
             <FilterSelect label="Installation" value={filterInstallation} options={INSTALLATIONS} onChange={v => setFilterInstallation(v as 'All' | Installation)} />
@@ -223,7 +225,7 @@ export function ProductsPage() {
                 fontWeight: 700, color: 'var(--binge-text-muted)',
                 letterSpacing: '0.03em', padding: '0 4px', height: '44px',
               }}>
-                <X size={13} /> Clear
+                <X size={13} /> {translateCopy('Clear', locale)}
               </button>
             )}
           </div>
@@ -251,7 +253,7 @@ export function ProductsPage() {
                   transition: 'color 0.15s, border-color 0.15s',
                 }}
               >
-                {cat === 'All' ? 'All Products' : cat}
+                {translateCopy(cat === 'All' ? 'All Products' : cat, locale)}
               </button>
             ))}
           </div>

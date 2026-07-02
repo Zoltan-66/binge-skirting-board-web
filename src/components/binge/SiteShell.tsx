@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { Footer } from "./Footer";
 import { GuidedTour } from "./GuidedTour";
+import { LocalizedDomText } from "./LocalizedDomText";
 import { Navigation } from "./Navigation";
 import { useBingeSectionMotion } from "./useBingeSectionMotion";
 import { useI18n } from "@/lib/i18n";
@@ -35,6 +36,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
       <main ref={mainRef}>{children}</main>
       <Footer />
       <GuidedTour />
+      <LocalizedDomText locale={locale} />
     </div>
   );
 }
