@@ -104,7 +104,7 @@ export function CatalogueProductPage({ product }: { product: Product }) {
           <div className="grid grid-cols-1 lg:grid-cols-2" style={{ gap: 'clamp(36px, 8vw, 100px)', alignItems: 'start' }}>
             <div>
               <span style={label}>Specification approach</span>
-              <h2 style={{ margin: '18px 0 18px', fontSize: 'var(--binge-size-display-lg)', lineHeight: 'var(--binge-lh-display)', letterSpacing: '-0.025em' }}>
+              <h2 style={{ margin: '18px 0 18px', color: '#fff', fontSize: 'var(--binge-size-display-lg)', lineHeight: 'var(--binge-lh-display)', letterSpacing: '-0.025em' }}>
                 Project-ready information, confirmed before quotation.
               </h2>
               <p style={{ margin: 0, maxWidth: 620, color: 'rgba(255,255,255,0.7)', lineHeight: 1.75, fontWeight: 300 }}>
@@ -115,7 +115,7 @@ export function CatalogueProductPage({ product }: { product: Product }) {
               {['Profile drawing and dimensions', 'Available finishes and accessories', 'Packing, MOQ and production lead time', 'Current test reports and compliance documents'].map(item => (
                 <div key={item} style={{ display: 'flex', gap: 14, alignItems: 'center', padding: '18px 0', borderBottom: '1px solid rgba(255,255,255,0.18)' }}>
                   <Check size={17} color="var(--binge-orange)" />
-                  <span>{item}</span>
+                  <span style={{ color: 'rgba(255,255,255,0.88)' }}>{item}</span>
                 </div>
               ))}
             </div>
