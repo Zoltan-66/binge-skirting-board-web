@@ -2,6 +2,9 @@
 
 import { localizeHref, useI18n } from '@/lib/i18n';
 
+const WHATSAPP_LABEL = '+44 7879 937232';
+const WHATSAPP_HREF = 'https://wa.me/447879937232';
+
 const COLUMNS = [
   {
     heading: 'Products',
@@ -37,7 +40,7 @@ const COLUMNS = [
     links: [
       'Zhejiang, China',
       'info@binge-profiles.com',
-      'WhatsApp on request',
+      WHATSAPP_LABEL,
       'Mon–Fri, 09:00–18:00 CST',
     ],
   },
@@ -81,7 +84,7 @@ const footerHref = (label: string) => {
     'Contact': '/request-a-quote',
     'Zhejiang, China': '/oem-odm#factory',
     'info@binge-profiles.com': 'mailto:info@binge-profiles.com',
-    'WhatsApp on request': 'mailto:info@binge-profiles.com?subject=WhatsApp Contact Request',
+    [WHATSAPP_LABEL]: WHATSAPP_HREF,
     'Mon–Fri, 09:00–18:00 CST': '/request-a-quote',
   };
   return routes[label] ?? '/';
