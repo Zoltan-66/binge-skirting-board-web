@@ -8,10 +8,33 @@ import { RequestAQuotePage } from "@/features/binge-pages/RequestAQuotePage";
 import { AluminiumSkirtingPage } from "@/features/binge-pages/AluminiumSkirtingPage";
 import { TGProductPage } from "@/features/binge-pages/TGProductPage";
 import { CatalogueProductPage } from "@/features/binge-pages/CatalogueProductPage";
-import { getProductBySlug } from "@/data/product-catalogue";
+import { PRODUCT_CATALOGUE, getProductBySlug } from "@/data/product-catalogue";
 import type { Metadata } from "next";
 
 type PageProps = { params: Promise<{ locale: string; slug?: string[] }> };
+const supportedLocales = ["en", "zh", "de", "es", "fr"] as const;
+const staticSlugs = [
+  [],
+  ["products"],
+  ["applications"],
+  ["downloads"],
+  ["oem-odm"],
+  ["request-a-quote"],
+  ["products", "aluminum-skirting"],
+  ["products", "tg-clip-on-solid-wood-skirting-system"],
+  ...PRODUCT_CATALOGUE.map(product => ["products", product.slug]),
+];
+
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return supportedLocales.flatMap(locale =>
+    staticSlugs.map(slug => ({
+      locale,
+      slug,
+    })),
+  );
+}
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale, slug = [] } = await params;
@@ -40,7 +63,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function LocalizedPage({ params }: PageProps) {
   const { locale, slug = [] } = await params;
-  if (!["en", "zh", "de", "es", "fr"].includes(locale)) notFound();
+  if (!supportedLocales.includes(locale as (typeof supportedLocales)[number])) notFound();
 
   const path = slug.join("/");
   if (!path) return <HomePage />;
