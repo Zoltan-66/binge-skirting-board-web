@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { NavLink, Link } from '@/lib/router-compat';
 import { Menu, X, Search, ChevronRight } from 'lucide-react';
 import { LanguageMenu } from './LanguageMenu';
+import { SearchDialog } from './SearchDialog';
 import { useI18n, type MessageKey } from '@/lib/i18n';
 
 const NAV_LINKS: Array<{ key: MessageKey; to: string }> = [
@@ -45,6 +46,7 @@ const orangeBtn: React.CSSProperties = {
 
 export function Navigation() {
   const [open, setOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const { locale, t } = useI18n();
 
   useEffect(() => {
@@ -107,7 +109,7 @@ export function Navigation() {
           {/* ── Desktop actions ── */}
           <div className="hidden lg:flex items-center gap-1 flex-shrink-0">
             <LanguageMenu />
-            <button style={{
+            <button onClick={() => setSearchOpen(true)} style={{
               background: 'none', border: 'none', cursor: 'pointer',
               color: 'var(--binge-text-muted)', padding: '8px',
               display: 'flex', alignItems: 'center',
@@ -227,7 +229,7 @@ export function Navigation() {
             </Link>
             <div style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
               <LanguageMenu />
-              <button style={{
+              <button onClick={() => { setOpen(false); setSearchOpen(true); }} style={{
                 background: 'none', border: 'none', cursor: 'pointer',
                 color: 'var(--binge-text-muted)', padding: '8px',
                 display: 'flex', alignItems: 'center', gap: '6px',
@@ -241,6 +243,7 @@ export function Navigation() {
           </div>
         </div>
       )}
+      <SearchDialog open={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   );
 }
