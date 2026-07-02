@@ -1,5 +1,7 @@
 "use client";
 
+import { Link } from '@/lib/router-compat';
+
 /*
  * FlagshipSection stacks on mobile: text → wood photograph.
  * On desktop: dark split — text left, photograph right.
@@ -101,7 +103,7 @@ export function FlagshipSection() {
             </ul>
 
             <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-              <a href="/products/tg-clip-on-solid-wood-skirting-system" style={darkBtn(true)}>View TG System</a>
+              <Link to="/products/tg-clip-on-solid-wood-skirting-system" style={darkBtn(true)}>View TG System</Link>
               <a href="mailto:samples@binge-profiles.com?subject=WS-TG Sample Request" style={darkBtn(false)}>Request a Sample</a>
             </div>
           </div>

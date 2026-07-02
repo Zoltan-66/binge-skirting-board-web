@@ -1,7 +1,7 @@
 "use client";
 
 import { Link } from '@/lib/router-compat';
-import { PRODUCT_CATALOGUE } from '@/features/binge-pages/ProductsPage';
+import { PRODUCT_CATALOGUE } from '@/data/product-catalogue';
 
 const FEATURED_SYSTEMS = [
   {
