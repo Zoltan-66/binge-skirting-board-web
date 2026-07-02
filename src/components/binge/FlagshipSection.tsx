@@ -113,7 +113,7 @@ export function FlagshipSection() {
 
             <div data-binge-reveal style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
               <Link to="/products/tg-clip-on-solid-wood-skirting-system" style={darkBtn(true)}>View TG System</Link>
-              <a href="mailto:samples@binge-profiles.com?subject=WS-TG Sample Request" style={darkBtn(false)}>Request a Sample</a>
+              <a href="mailto:info@bingeskirtingboard.com?subject=WS-TG Sample Request" style={darkBtn(false)}>Request a Sample</a>
             </div>
           </div>
 

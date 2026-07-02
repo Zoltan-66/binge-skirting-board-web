@@ -249,8 +249,8 @@ export function TGProductPage() {
 
               {/* CTAs */}
               <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '28px' }}>
-                <a href="mailto:samples@binge-profiles.com" style={solidOrangeBtn}>Request a Sample</a>
-                <a href="mailto:quote@binge-profiles.com" style={outlineBtn(false)}>Request a Quote</a>
+                <a href="mailto:info@bingeskirtingboard.com?subject=WS-TG Sample Request" style={solidOrangeBtn}>Request a Sample</a>
+                <a href="mailto:info@bingeskirtingboard.com?subject=WS-TG Quote Request" style={outlineBtn(false)}>Request a Quote</a>
               </div>
 
               {/* Separator + size note */}
@@ -261,7 +261,7 @@ export function TGProductPage() {
                 }}>
                   Sizes and finishes are available on request. Contact our technical team for custom dimensions, timber species and packaging options.
                 </p>
-                <a href="mailto:technical@binge-profiles.com" style={{
+                <a href="mailto:info@bingeskirtingboard.com?subject=WS-TG Technical Request" style={{
                   fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-label)', fontWeight: 700,
                   color: 'var(--binge-orange)', letterSpacing: 'var(--binge-tracking-label)',
                   textTransform: 'uppercase', textDecoration: 'none',
@@ -328,7 +328,7 @@ export function TGProductPage() {
                 dimensions are listed here to prevent out-of-date information from
                 reaching specifications.
               </p>
-              <a href="mailto:technical@binge-profiles.com" style={solidOrangeBtn}>
+              <a href="mailto:info@bingeskirtingboard.com?subject=WS-TG Sizes and Spec Sheet Request" style={solidOrangeBtn}>
                 Request Sizes &amp; Spec Sheet
               </a>
             </div>
@@ -448,7 +448,7 @@ export function TGProductPage() {
                 ))}
               </ul>
               <div>
-                <a href="mailto:technical@binge-profiles.com" style={solidOrangeBtn}>
+                <a href="mailto:info@bingeskirtingboard.com?subject=WS-TG Drawing Package Request" style={solidOrangeBtn}>
                   Request Drawing Package
                 </a>
               </div>
@@ -593,7 +593,7 @@ export function TGProductPage() {
                   <div>{d.date}</div>
                   <div>{d.size}</div>
                 </div>
-                <a href="mailto:technical@binge-profiles.com" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-label)', fontWeight: 700, color: 'var(--binge-orange)', letterSpacing: 'var(--binge-tracking-label)', textTransform: 'uppercase', textDecoration: 'none', flexShrink: 0 }}>
+                <a href="mailto:info@bingeskirtingboard.com?subject=WS-TG Technical Request" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-label)', fontWeight: 700, color: 'var(--binge-orange)', letterSpacing: 'var(--binge-tracking-label)', textTransform: 'uppercase', textDecoration: 'none', flexShrink: 0 }}>
                   <span className="hidden sm:inline">Download</span>
                   <Download size={16} />
                 </a>
@@ -649,8 +649,8 @@ export function TGProductPage() {
             arrange physical samples for your project sign-off.
           </p>
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center' }}>
-            <a href="mailto:samples@binge-profiles.com" style={solidOrangeBtn}>Request a Sample</a>
-            <a href="mailto:quote@binge-profiles.com" style={outlineBtn(true)}>Request a Quote</a>
+            <a href="mailto:info@bingeskirtingboard.com?subject=WS-TG Sample Request" style={solidOrangeBtn}>Request a Sample</a>
+            <a href="mailto:info@bingeskirtingboard.com?subject=WS-TG Quote Request" style={outlineBtn(true)}>Request a Quote</a>
           </div>
         </div>
       </section>

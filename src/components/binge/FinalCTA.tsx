@@ -82,7 +82,7 @@ export function FinalCTA() {
             }}>
               {copy.quote}
             </Link>
-            <a href="mailto:samples@binge-profiles.com" style={{
+            <a href="mailto:info@bingeskirtingboard.com?subject=Sample Request" style={{
               backgroundColor: 'transparent',
               color: '#fff',
               fontFamily: 'var(--binge-font)',

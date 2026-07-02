@@ -194,7 +194,7 @@ function ProductCard({ p }: { p: Product }) {
             </span>
           ))}
         </div>
-        <a href="mailto:technical@binge-profiles.com" style={{ fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-label)', fontWeight: 700, color: 'var(--binge-orange)', letterSpacing: 'var(--binge-tracking-label)', textTransform: 'uppercase', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+        <a href="mailto:info@bingeskirtingboard.com?subject=Aluminium Skirting Technical Request" style={{ fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-label)', fontWeight: 700, color: 'var(--binge-orange)', letterSpacing: 'var(--binge-tracking-label)', textTransform: 'uppercase', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
           View Product <ArrowRight size={13} />
         </a>
       </div>
@@ -254,8 +254,8 @@ export function AluminiumSkirtingPage() {
                 sizes, colours and accessories are confirmed with each enquiry.
               </p>
               <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                <a href="mailto:samples@binge-profiles.com" style={orangeBtn}>Request a Sample</a>
-                <a href="mailto:quote@binge-profiles.com" style={outlineLight}>Request a Quote</a>
+                <a href="mailto:info@bingeskirtingboard.com?subject=Aluminium Skirting Sample Request" style={orangeBtn}>Request a Sample</a>
+                <a href="mailto:info@bingeskirtingboard.com?subject=Aluminium Skirting Quote Request" style={outlineLight}>Request a Quote</a>
               </div>
             </div>
             {/* Photograph — never under text */}
@@ -452,7 +452,7 @@ export function AluminiumSkirtingPage() {
                   { icon: FileText, label: 'AS-Series Installation Guide' },
                   { icon: Download, label: '3D Model Pack (STEP)' },
                 ].map(({ icon: Icon, label }) => (
-                  <a key={label} href="mailto:technical@binge-profiles.com?subject=Document Request: AS-Series" style={{
+                  <a key={label} href="mailto:info@bingeskirtingboard.com?subject=Document Request: AS-Series" style={{
                     display: 'flex', alignItems: 'center', gap: '14px',
                     padding: '14px 16px', border: '1px solid rgba(255,255,255,0.1)',
                     textDecoration: 'none', transition: 'border-color 0.15s',
@@ -479,10 +479,10 @@ export function AluminiumSkirtingPage() {
                 </p>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'flex-start' }}>
-                <a href="mailto:samples@binge-profiles.com?subject=Sample Request: AS-Series Aluminium Skirting" style={orangeBtn}>
+                <a href="mailto:info@bingeskirtingboard.com?subject=Sample Request: AS-Series Aluminium Skirting" style={orangeBtn}>
                   Request a Sample
                 </a>
-                <a href="mailto:quote@binge-profiles.com?subject=RFQ: AS-Series Aluminium Skirting" style={outlineLight}>
+                <a href="mailto:info@bingeskirtingboard.com?subject=RFQ: AS-Series Aluminium Skirting" style={outlineLight}>
                   Request a Quote
                 </a>
                 <Link to="/downloads" style={{

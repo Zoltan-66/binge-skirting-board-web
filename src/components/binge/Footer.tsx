@@ -4,6 +4,7 @@ import { localizeHref, useI18n } from '@/lib/i18n';
 
 const WHATSAPP_LABEL = '+44 7879 937232';
 const WHATSAPP_HREF = 'https://wa.me/447879937232';
+const CONTACT_EMAIL = 'info@bingeskirtingboard.com';
 
 const COLUMNS = [
   {
@@ -39,7 +40,7 @@ const COLUMNS = [
     heading: 'Contact',
     links: [
       'Zhejiang, China',
-      'info@binge-profiles.com',
+      CONTACT_EMAIL,
       WHATSAPP_LABEL,
       'Mon–Fri, 09:00–18:00 CST',
     ],
@@ -83,7 +84,7 @@ const footerHref = (label: string) => {
     'Applications': '/applications',
     'Contact': '/request-a-quote',
     'Zhejiang, China': '/oem-odm#factory',
-    'info@binge-profiles.com': 'mailto:info@binge-profiles.com',
+    [CONTACT_EMAIL]: `mailto:${CONTACT_EMAIL}`,
     [WHATSAPP_LABEL]: WHATSAPP_HREF,
     'Mon–Fri, 09:00–18:00 CST': '/request-a-quote',
   };
@@ -212,7 +213,7 @@ export function Footer() {
           </span>
           <div style={{ display: 'flex', gap: '20px' }}>
             {['Privacy Policy', 'Terms of Use', 'Cookie Settings'].map(l => (
-              <a key={l} href={`mailto:info@binge-profiles.com?subject=${encodeURIComponent(l)}`} style={{
+              <a key={l} href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(l)}`} style={{
                 fontFamily: 'var(--binge-font)',
                 fontSize: 'var(--binge-size-caption)',
                 fontWeight: 400,

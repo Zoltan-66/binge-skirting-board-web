@@ -286,7 +286,7 @@ export function ApplicationsPage() {
                 at no charge.
               </p>
               <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                <a href="mailto:technical@binge-profiles.com" style={{
+                <a href="mailto:info@bingeskirtingboard.com?subject=Technical Application Request" style={{
                   backgroundColor: 'var(--binge-orange)', color: '#fff',
                   fontFamily: 'var(--binge-font)', fontWeight: 700,
                   fontSize: 'var(--binge-size-button)', letterSpacing: 'var(--binge-tracking-button)',

@@ -344,7 +344,7 @@ export function ProductsPage() {
               </p>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'flex-start' }}>
-              <a href="mailto:technical@binge-profiles.com" style={{
+              <a href="mailto:info@bingeskirtingboard.com?subject=Technical Product Request" style={{
                 backgroundColor: 'var(--binge-orange)', color: '#fff',
                 fontFamily: 'var(--binge-font)', fontWeight: 700,
                 fontSize: 'var(--binge-size-button)', letterSpacing: 'var(--binge-tracking-button)',
@@ -354,7 +354,7 @@ export function ProductsPage() {
               }}>
                 Contact Our Technical Team
               </a>
-              <a href="mailto:samples@binge-profiles.com?subject=Product Sample Request" style={{
+              <a href="mailto:info@bingeskirtingboard.com?subject=Product Sample Request" style={{
                 backgroundColor: 'transparent', color: '#fff',
                 fontFamily: 'var(--binge-font)', fontWeight: 700,
                 fontSize: 'var(--binge-size-button)', letterSpacing: 'var(--binge-tracking-button)',

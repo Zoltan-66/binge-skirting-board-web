@@ -233,8 +233,8 @@ export function OEMPage() {
                 factory engineers each programme to your specification.
               </p>
               <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                <a href="mailto:oem@binge-profiles.com" style={orangeBtn}>Start a Custom Project</a>
-                <a href="mailto:oem@binge-profiles.com" style={outlineLight}>Download OEM Brochure</a>
+                <a href="mailto:info@bingeskirtingboard.com?subject=OEM Custom Project" style={orangeBtn}>Start a Custom Project</a>
+                <a href="mailto:info@bingeskirtingboard.com?subject=OEM Brochure Request" style={outlineLight}>Download OEM Brochure</a>
               </div>
             </div>
 
@@ -509,7 +509,7 @@ export function OEMPage() {
             <p style={{ ...bodyText('var(--binge-text-muted)'), fontSize: 'var(--binge-size-body)', display: 'inline' }}>
               Don&apos;t see your question?{' '}
             </p>
-            <a href="mailto:oem@binge-profiles.com" style={{
+            <a href="mailto:info@bingeskirtingboard.com?subject=OEM Project Request" style={{
               fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-body)', fontWeight: 700,
               color: 'var(--binge-orange)', textDecoration: 'none',
               display: 'inline-flex', alignItems: 'center', gap: '6px',
@@ -552,8 +552,8 @@ export function OEMPage() {
             will respond within one business day with a technical proposal.
           </p>
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center' }}>
-            <a href="mailto:oem@binge-profiles.com" style={orangeBtn}>Start a Custom Project</a>
-            <a href="mailto:oem@binge-profiles.com" style={outlineLight}>Request OEM Brochure</a>
+            <a href="mailto:info@bingeskirtingboard.com?subject=OEM Custom Project" style={orangeBtn}>Start a Custom Project</a>
+            <a href="mailto:info@bingeskirtingboard.com?subject=OEM Brochure Request" style={outlineLight}>Request OEM Brochure</a>
           </div>
         </div>
       </section>
