@@ -1,7 +1,10 @@
 "use client";
 
+import { useRef } from 'react';
 import { Link } from '@/lib/router-compat';
 import { PRODUCT_CATALOGUE } from '@/data/product-catalogue';
+import { useBingeSectionMotion } from './useBingeSectionMotion';
+import { useI18n } from '@/lib/i18n';
 
 const FEATURED_SYSTEMS = [
   {
@@ -59,16 +62,20 @@ const exploreLinkStyle: React.CSSProperties = {
 };
 
 export function ProductGrid() {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const { t } = useI18n();
+  useBingeSectionMotion(sectionRef);
+
   return (
-    <section id="products" style={{ backgroundColor: 'var(--binge-white)' }}>
+    <section ref={sectionRef} id="products" style={{ backgroundColor: 'var(--binge-white)' }}>
       <div style={{
         maxWidth: 'var(--binge-content-max)',
         margin: '0 auto',
         padding: 'var(--binge-section-v) var(--binge-pad-h)',
       }}>
         {/* ── Section header ── */}
-        <div style={{ marginBottom: '56px' }}>
-          <span style={{
+        <div data-tour="product-grid" style={{ marginBottom: '56px' }}>
+          <span data-binge-reveal style={{
             fontFamily: 'var(--binge-font)',
             fontSize: 'var(--binge-size-label)',
             fontWeight: 700,
@@ -78,9 +85,9 @@ export function ProductGrid() {
             display: 'block',
             marginBottom: '16px',
           }}>
-            Product Systems
+            {t('productSystems')}
           </span>
-          <h2 style={{
+          <h2 data-binge-reveal style={{
             fontFamily: 'var(--binge-font)',
             fontSize: 'var(--binge-size-display-lg)',
             fontWeight: 700,
@@ -89,8 +96,7 @@ export function ProductGrid() {
             margin: 0,
             letterSpacing: '-0.025em',
           }}>
-            One manufacturing partner.<br />
-            Multiple architectural solutions.
+            {t('productHeading')}
           </h2>
         </div>
 
@@ -103,10 +109,16 @@ export function ProductGrid() {
             <div
               key={p.code}
               className="group"
+              data-binge-card
               style={{ backgroundColor: 'var(--binge-white)' }}
             >
               {/* Photo */}
-              <div style={{ overflow: 'hidden', aspectRatio: '4 / 3' }}>
+              <Link
+                to={p.slug}
+                aria-label={`Explore ${p.category}`}
+                data-binge-media
+                style={{ display: 'block', overflow: 'hidden', aspectRatio: '4 / 3' }}
+              >
                 <img
                   src={p.img}
                   alt={p.alt}
@@ -119,30 +131,32 @@ export function ProductGrid() {
                   }}
                   className="group-hover:scale-105"
                 />
-              </div>
+              </Link>
 
               {/* Card body */}
               <div style={{ padding: 'clamp(16px, 4vw, 28px)', backgroundColor: 'var(--binge-card-bg)' }}>
-                <h3 style={{
-                  fontFamily: 'var(--binge-font)',
-                  fontSize: 'var(--binge-size-title-md)',
-                  fontWeight: 700,
-                  color: 'var(--binge-text-primary)',
-                  margin: '0 0 10px',
-                  lineHeight: 1.25,
-                }}>
-                  {p.category}
-                </h3>
-                <p style={{
-                  fontFamily: 'var(--binge-font)',
-                  fontSize: 'var(--binge-size-body)',
-                  fontWeight: 300,
-                  color: 'var(--binge-text-body)',
-                  lineHeight: 'var(--binge-lh-body)',
-                  margin: '0 0 20px',
-                }}>
-                  {p.desc}
-                </p>
+                <Link to={p.slug} style={{ display: 'block', textDecoration: 'none' }}>
+                  <h3 style={{
+                    fontFamily: 'var(--binge-font)',
+                    fontSize: 'var(--binge-size-title-md)',
+                    fontWeight: 700,
+                    color: 'var(--binge-text-primary)',
+                    margin: '0 0 10px',
+                    lineHeight: 1.25,
+                  }}>
+                    {p.category}
+                  </h3>
+                  <p style={{
+                    fontFamily: 'var(--binge-font)',
+                    fontSize: 'var(--binge-size-body)',
+                    fontWeight: 300,
+                    color: 'var(--binge-text-body)',
+                    lineHeight: 'var(--binge-lh-body)',
+                    margin: '0 0 20px',
+                  }}>
+                    {p.desc}
+                  </p>
+                </Link>
                 <Link to={p.slug} style={exploreLinkStyle}>Explore System ›</Link>
               </div>
             </div>

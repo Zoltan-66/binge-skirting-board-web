@@ -1,5 +1,9 @@
 "use client";
 
+import { useRef } from 'react';
+import { useBingeSectionMotion } from './useBingeSectionMotion';
+import { useI18n } from '@/lib/i18n';
+
 const APPLICATIONS = [
   {
     id: 1,
@@ -32,8 +36,26 @@ const APPLICATIONS = [
 ];
 
 export function ApplicationsSection() {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const { locale } = useI18n();
+  const sectionCopy = {
+    en: { label: 'Applications', heading: 'Made for residential and commercial interiors.' },
+    zh: { label: '应用场景', heading: '为住宅与商业室内空间而设计。' },
+    de: { label: 'Anwendungen', heading: 'Für Wohn- und Gewerbeinnenräume entwickelt.' },
+    es: { label: 'Aplicaciones', heading: 'Diseñado para interiores residenciales y comerciales.' },
+    fr: { label: 'Applications', heading: 'Conçu pour les intérieurs résidentiels et commerciaux.' },
+  }[locale];
+  const translatedCards = {
+    zh: [['住宅空间', '适用于不同定位的高端公寓、住宅与居住开发项目。'], ['酒店与餐饮', '适用于酒店、度假村、餐厅及高品质宾客空间。'], ['办公空间', '适用于商业办公室、共享办公及企业室内装修。'], ['医疗与商业', '适用于医院、诊所、零售及高人流商业建筑。']],
+    de: [['Wohnen', 'Premiumwohnungen, Häuser und Wohnprojekte für alle Spezifikationsstufen.'], ['Hotellerie', 'Hotels, Resorts, Restaurants und hochwertige Gästebereiche.'], ['Arbeitswelten', 'Büros, Coworking-Flächen und gewerblicher Innenausbau.'], ['Gesundheit & Gewerbe', 'Kliniken, Einzelhandel und stark frequentierte Gewerbebauten.']],
+    es: [['Residencial', 'Apartamentos, viviendas y promociones residenciales de alta calidad.'], ['Hostelería', 'Hoteles, complejos turísticos, restaurantes y espacios premium para huéspedes.'], ['Espacios de trabajo', 'Oficinas, coworking e interiores corporativos.'], ['Salud y comercio', 'Hospitales, clínicas, comercios y edificios de alto tránsito.']],
+    fr: [['Résidentiel', 'Appartements, maisons et programmes résidentiels haut de gamme.'], ['Hôtellerie', 'Hôtels, complexes, restaurants et espaces d’accueil premium.'], ['Espaces de travail', 'Bureaux, coworking et aménagements intérieurs d’entreprise.'], ['Santé et commerce', 'Hôpitaux, cliniques, commerces et bâtiments à forte fréquentation.']],
+  } as const;
+  const applications = locale === 'en' ? APPLICATIONS : APPLICATIONS.map((app, index) => ({ ...app, label: translatedCards[locale][index][0], desc: translatedCards[locale][index][1] }));
+  useBingeSectionMotion(sectionRef);
+
   return (
-    <section style={{ backgroundColor: 'var(--binge-warm-bg)' }}>
+    <section ref={sectionRef} style={{ backgroundColor: 'var(--binge-warm-bg)' }}>
       <div style={{
         maxWidth: 'var(--binge-content-max)',
         margin: '0 auto',
@@ -41,7 +63,7 @@ export function ApplicationsSection() {
       }}>
         {/* ── Section header ── */}
         <div style={{ marginBottom: '56px' }}>
-          <span style={{
+          <span data-binge-reveal style={{
             fontFamily: 'var(--binge-font)',
             fontSize: 'var(--binge-size-label)',
             fontWeight: 700,
@@ -51,9 +73,9 @@ export function ApplicationsSection() {
             display: 'block',
             marginBottom: '16px',
           }}>
-            Applications
+            {sectionCopy.label}
           </span>
-          <h2 style={{
+          <h2 data-binge-reveal style={{
             fontFamily: 'var(--binge-font)',
             fontSize: 'var(--binge-size-display-md)',
             fontWeight: 700,
@@ -62,17 +84,17 @@ export function ApplicationsSection() {
             margin: 0,
             letterSpacing: '-0.025em',
           }}>
-            Made for residential and commercial interiors.
+            {sectionCopy.heading}
           </h2>
         </div>
 
         {/* ── 4-col image blocks — labels ALWAYS below the image ── */}
         {/* 2-col on mobile (compact portrait blocks), 4-col on desktop */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
-          {APPLICATIONS.map(app => (
-            <div key={app.id} className="group">
+          {applications.map(app => (
+            <div key={app.id} className="group" data-binge-card>
               {/* Image — label always below, never over */}
-              <div style={{ overflow: 'hidden', aspectRatio: '2 / 3', marginBottom: '14px' }}>
+              <div data-binge-media style={{ overflow: 'hidden', aspectRatio: '2 / 3', marginBottom: '14px' }}>
                 <img
                   src={app.img}
                   alt={app.alt}

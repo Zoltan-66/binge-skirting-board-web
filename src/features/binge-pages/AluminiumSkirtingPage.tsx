@@ -170,7 +170,7 @@ function FilterSelect({ label, value, options, onChange }: {
 
 function ProductCard({ p }: { p: Product }) {
   return (
-    <div className="group" style={{ backgroundColor: 'var(--binge-white)' }}>
+    <div className="group" data-binge-card style={{ backgroundColor: 'var(--binge-white)' }}>
       <div style={{ overflow: 'hidden', aspectRatio: '4 / 3', backgroundColor: 'var(--binge-card-bg)' }}>
         <img src={p.img} alt={p.alt}
           style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.45s ease' }}

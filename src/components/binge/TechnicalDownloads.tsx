@@ -1,7 +1,11 @@
 "use client";
 
+import { useRef } from 'react';
 import { DOWNLOAD_RESOURCES, FEATURED_DOWNLOAD_RESOURCES } from '@/data/download-resources';
 import { ArrowRight, FileText } from 'lucide-react';
+import { useBingeSectionMotion } from './useBingeSectionMotion';
+import { useI18n } from '@/lib/i18n';
+import { Link } from '@/lib/router-compat';
 
 const DOCS = FEATURED_DOWNLOAD_RESOURCES.map(type => {
   const representative = DOWNLOAD_RESOURCES.find(resource => resource.docType === type);
@@ -14,8 +18,12 @@ const DOCS = FEATURED_DOWNLOAD_RESOURCES.map(type => {
 });
 
 export function TechnicalDownloads() {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const { t } = useI18n();
+  useBingeSectionMotion(sectionRef, { imageParallax: false });
+
   return (
-    <section id="downloads" style={{ backgroundColor: 'var(--binge-white)' }}>
+    <section ref={sectionRef} id="downloads" style={{ backgroundColor: 'var(--binge-white)' }}>
       <div style={{
         maxWidth: 'var(--binge-content-max)',
         margin: '0 auto',
@@ -29,8 +37,8 @@ export function TechnicalDownloads() {
           gap: '16px',
           marginBottom: '48px',
         }}>
-          <div>
-            <span style={{
+          <div data-tour="technical-downloads">
+            <span data-binge-reveal style={{
               fontFamily: 'var(--binge-font)',
               fontSize: 'var(--binge-size-label)',
               fontWeight: 700,
@@ -40,9 +48,9 @@ export function TechnicalDownloads() {
               display: 'block',
               marginBottom: '14px',
             }}>
-              Technical Resources
+              {t('technicalResources')}
             </span>
-            <h2 style={{
+            <h2 data-binge-reveal style={{
               fontFamily: 'var(--binge-font)',
               fontSize: 'var(--binge-size-display-sm)',
               fontWeight: 700,
@@ -51,9 +59,9 @@ export function TechnicalDownloads() {
               margin: 0,
               letterSpacing: '-0.02em',
             }}>
-              Specifications, drawings<br />and documentation.
+              {t('technicalHeading')}
             </h2>
-            <p style={{
+            <p data-binge-reveal style={{
               fontFamily: 'var(--binge-font)',
               fontSize: 'var(--binge-size-body)',
               fontWeight: 300,
@@ -67,7 +75,7 @@ export function TechnicalDownloads() {
               catalogue pages and compliance references for their market.
             </p>
           </div>
-          <a href="/downloads" style={{
+          <Link to="/downloads" data-binge-reveal style={{
             fontFamily: 'var(--binge-font)',
             fontSize: 'var(--binge-size-label)',
             fontWeight: 700,
@@ -77,7 +85,7 @@ export function TechnicalDownloads() {
             textDecoration: 'none',
           }}>
             View All Resources ›
-          </a>
+          </Link>
         </div>
 
         <div style={{ borderTop: '1px solid var(--binge-border)' }}>
@@ -85,6 +93,7 @@ export function TechnicalDownloads() {
             <div
               key={d.type}
               className="group"
+              data-binge-card
               style={{
                 borderBottom: '1px solid var(--binge-border)',
                 padding: 'clamp(16px, 3vw, 28px) 0',
@@ -141,7 +150,7 @@ export function TechnicalDownloads() {
                 <div>PDF / DXF by product</div>
               </div>
 
-              <a href="/downloads" style={{
+              <Link to="/downloads" style={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
@@ -156,7 +165,7 @@ export function TechnicalDownloads() {
               }}>
                 <span className="hidden sm:inline">Request</span>
                 <ArrowRight size={16} />
-              </a>
+              </Link>
             </div>
           ))}
         </div>

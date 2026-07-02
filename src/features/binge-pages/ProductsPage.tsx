@@ -60,17 +60,21 @@ function FilterSelect({ label, value, options, onChange }: {
 // ─── ProductCard ──────────────────────────────────────────────────────────────
 
 function ProductCard({ p }: { p: Product }) {
-  const detailSlug = p.slug;
+  const detailHref = `/products/${p.slug}`;
 
   return (
-    <div className="group" style={{ backgroundColor: 'var(--binge-white)' }}>
-      <div style={{ overflow: 'hidden', aspectRatio: '4 / 3', backgroundColor: 'var(--binge-card-bg)' }}>
+    <div className="group" data-binge-card style={{ backgroundColor: 'var(--binge-white)' }}>
+      <Link
+        to={detailHref}
+        aria-label={`View ${p.name}`}
+        style={{ display: 'block', overflow: 'hidden', aspectRatio: '4 / 3', backgroundColor: 'var(--binge-card-bg)' }}
+      >
         <img
           src={p.img} alt={p.alt}
           style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.45s ease' }}
           className="group-hover:scale-105"
         />
-      </div>
+      </Link>
       <div style={{ padding: 'clamp(16px, 3vw, 24px)', backgroundColor: 'var(--binge-card-bg)' }}>
         <div style={{
           fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-caption)',
@@ -106,8 +110,7 @@ function ProductCard({ p }: { p: Product }) {
             </span>
           ))}
         </div>
-        {detailSlug ? (
-          <Link to={`/products/${detailSlug}`} style={{
+        <Link to={detailHref} style={{
             fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-label)',
             fontWeight: 700, color: 'var(--binge-orange)',
             letterSpacing: 'var(--binge-tracking-label)', textTransform: 'uppercase',
@@ -115,16 +118,6 @@ function ProductCard({ p }: { p: Product }) {
           }}>
             View Product <ArrowRight size={13} />
           </Link>
-        ) : (
-          <a href={`/request-a-quote?product=${encodeURIComponent(p.code)}`} style={{
-            fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-label)',
-            fontWeight: 700, color: 'var(--binge-orange)',
-            letterSpacing: 'var(--binge-tracking-label)', textTransform: 'uppercase',
-            textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px',
-          }}>
-            View Product <ArrowRight size={13} />
-          </a>
-        )}
       </div>
     </div>
   );
@@ -372,7 +365,7 @@ export function ProductsPage() {
               }}>
                 Request a Sample
               </a>
-              <a href="/downloads" style={{
+              <Link to="/downloads" style={{
                 fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-label)',
                 fontWeight: 700, color: 'rgba(255,255,255,0.5)',
                 letterSpacing: 'var(--binge-tracking-label)', textTransform: 'uppercase',
@@ -380,7 +373,7 @@ export function ProductsPage() {
                 gap: '6px', marginTop: '4px',
               }}>
                 Download Full Catalogue <ArrowRight size={13} />
-              </a>
+              </Link>
             </div>
           </div>
         </div>
