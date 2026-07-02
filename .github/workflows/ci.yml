@@ -30,3 +30,4 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm build
+      - run: node scripts/assert-cloudflare-pages-output.mjs
