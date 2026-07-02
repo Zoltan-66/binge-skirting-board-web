@@ -1,9 +1,11 @@
 "use client";
 
-import { useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Link } from '@/lib/router-compat';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { ChevronRight, ChevronDown, Upload, X, CheckCircle, ArrowRight } from 'lucide-react';
+import { PRODUCT_CATALOGUE, type Product } from '@/data/product-catalogue';
+import { parseRfqDraft, RFQ_DRAFT_STORAGE_KEY, sanitizeRfqDraft } from '@/lib/rfq-draft';
 
 // ─── Form data type ───────────────────────────────────────────────────────────
 
@@ -56,6 +58,16 @@ const PRODUCT_CATEGORIES = [
   'Accessories',
   'Multiple / Not yet decided',
 ];
+
+const CATEGORY_LABELS: Record<Product['category'], string> = {
+  Aluminium: 'Aluminium Skirting',
+  Recessed: 'Recessed & Shadow Gap Systems',
+  LED: 'LED Skirting Systems',
+  'Solid Wood': 'Solid Wood Skirting',
+  'Stainless Steel': 'Stainless Steel Skirting',
+  WPC: 'WPC Skirting',
+  Trims: 'Trims & Finishing Profiles',
+};
 
 const FINISHES = [
   'Brushed Anodised',
@@ -126,44 +138,40 @@ function SuccessState({ onReset }: { onReset: () => void }) {
           fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-label)', fontWeight: 700,
           color: 'var(--binge-orange)', letterSpacing: 'var(--binge-tracking-label)', textTransform: 'uppercase',
           display: 'block', marginBottom: '16px',
-        }}>Quote Request Received</span>
+        }}>Pre-launch Form Preview</span>
 
         <h1 style={{
           fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-display-sm)', fontWeight: 700,
           color: 'var(--binge-text-primary)', lineHeight: 'var(--binge-lh-heading)',
           margin: '0 0 20px', letterSpacing: '-0.02em',
         }}>
-          Thank you. We&apos;ll be in touch.
+          Validation complete. Nothing was sent.
         </h1>
 
         <p style={{
           fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-body-lg)', fontWeight: 300,
           color: 'var(--binge-text-body)', lineHeight: 'var(--binge-lh-body)', margin: '0 0 12px',
         }}>
-          Our technical team will review your submission and respond within
-          <strong style={{ fontWeight: 700, color: 'var(--binge-text-primary)' }}> 2 business days</strong> with
-          a quotation or any clarifying questions.
+          This website is still in test mode. Your entries were checked in this browser, but no enquiry,
+          contact details or attachment was transmitted to BINGE.
         </p>
 
         <p style={{
           fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-body)', fontWeight: 300,
           color: 'var(--binge-text-muted)', lineHeight: 'var(--binge-lh-body)', margin: '0 0 40px',
         }}>
-          For urgent projects, contact us directly at{' '}
-          <a href="mailto:quote@binge-profiles.com" style={{ color: 'var(--binge-orange)', fontWeight: 700, textDecoration: 'none' }}>
-            quote@binge-profiles.com
-          </a>
+          Real submission will be enabled after the company domain and receiving channel are configured.
         </p>
 
         {/* Next steps */}
         <div style={{ borderTop: '1px solid var(--binge-border)', borderBottom: '1px solid var(--binge-border)', padding: '28px 0', marginBottom: '32px', textAlign: 'left' }}>
           <p style={{ fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-label)', fontWeight: 700, color: 'var(--binge-text-muted)', letterSpacing: 'var(--binge-tracking-label)', textTransform: 'uppercase', margin: '0 0 16px' }}>
-            What happens next
+            What this preview checked
           </p>
           {[
-            'Our team reviews your product and quantity requirements.',
-            'We confirm sizes, finishes and availability with the factory.',
-            'You receive a detailed quotation with lead time and shipping options.',
+            'Required contact and project fields passed validation.',
+            'The selected catalogue product was carried into the RFQ.',
+            'Sensitive fields and attachments were not saved or transmitted.',
           ].map((step, i) => (
             <div key={i} style={{ display: 'flex', gap: '12px', marginBottom: i < 2 ? '12px' : 0 }}>
               <span style={{ fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-caption)', fontWeight: 700, color: 'var(--binge-orange)', flexShrink: 0, marginTop: '2px' }}>0{i + 1}</span>
@@ -204,13 +212,40 @@ export function RequestAQuotePage() {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [uploadError, setUploadError]   = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const draftReadyRef = useRef(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
+    control,
   } = useForm<QuoteFormData>({ mode: 'onBlur' });
+  const draftValues = useWatch({ control });
+
+  useEffect(() => {
+    const draft = parseRfqDraft(window.localStorage.getItem(RFQ_DRAFT_STORAGE_KEY));
+    reset(draft);
+
+    const requestedCode = new URLSearchParams(window.location.search).get('product')?.trim().toUpperCase();
+    const product = PRODUCT_CATALOGUE.find(item => item.code.toUpperCase() === requestedCode);
+    if (product) {
+      setValue('productCode', product.code);
+      setValue('productCategory', CATEGORY_LABELS[product.category]);
+    }
+    draftReadyRef.current = true;
+  }, [reset, setValue]);
+
+  useEffect(() => {
+    if (!draftReadyRef.current) return;
+    const safeDraft = sanitizeRfqDraft(draftValues);
+    if (Object.keys(safeDraft).length) {
+      window.localStorage.setItem(RFQ_DRAFT_STORAGE_KEY, JSON.stringify(safeDraft));
+    } else {
+      window.localStorage.removeItem(RFQ_DRAFT_STORAGE_KEY);
+    }
+  }, [draftValues]);
 
   const handleFile = (file: File) => {
     setUploadError('');
@@ -235,7 +270,8 @@ export function RequestAQuotePage() {
 
   const onSubmit = async () => {
     setSubmitting(true);
-    await new Promise(r => setTimeout(r, 1100));
+    await new Promise(r => setTimeout(r, 450));
+    window.localStorage.removeItem(RFQ_DRAFT_STORAGE_KEY);
     setSubmitting(false);
     setSubmitted(true);
   };
@@ -275,9 +311,8 @@ export function RequestAQuotePage() {
                 fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-body-lg)', fontWeight: 300,
                 color: 'rgba(255,255,255,0.6)', lineHeight: 'var(--binge-lh-body)', margin: 0,
               }}>
-                Complete the form below and our technical team will respond within 2 business days
-                with a detailed quotation. For urgent enquiries, email us directly at{' '}
-                <a href="mailto:quote@binge-profiles.com" style={{ color: 'var(--binge-orange)', fontWeight: 700, textDecoration: 'none' }}>quote@binge-profiles.com</a>
+                Preview the information buyers will provide for a quotation. Submission is currently disabled
+                while the company domain and receiving channel are being prepared.
               </p>
             </div>
           </div>
@@ -295,6 +330,11 @@ export function RequestAQuotePage() {
           }}>
             Fields marked <span style={{ color: 'var(--binge-orange)', fontWeight: 700 }}>*</span> are required.
           </p>
+
+          <div role="status" style={{ border: '1px solid var(--binge-orange)', background: 'var(--binge-warm-bg)', padding: '16px 18px', margin: '-20px 0 40px', color: 'var(--binge-text-body)', lineHeight: 1.6 }}>
+            <strong style={{ color: 'var(--binge-text-primary)' }}>Pre-launch test mode:</strong>{' '}
+            this form validates locally but does not send data. Only non-sensitive project selections are saved as a browser draft; contact details, messages, consent and files are never persisted.
+          </div>
 
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
             {/* ── Two-column grid ── */}
@@ -599,8 +639,7 @@ export function RequestAQuotePage() {
                   />
                   <span style={{ fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-body)', fontWeight: 300, color: 'var(--binge-text-body)', lineHeight: 1.6 }}>
                     I agree to BINGE&apos;s{' '}
-                    <a href="mailto:info@binge-profiles.com?subject=Privacy Policy" style={{ color: 'var(--binge-orange)', fontWeight: 700, textDecoration: 'none' }}>Privacy Policy</a>
-                    {' '}and consent to my contact details being used to respond to this enquiry.{' '}
+                    pre-launch privacy notice and understand that this test form does not transmit my contact details.{' '}
                     {reqStar}
                   </span>
                 </label>
@@ -623,10 +662,10 @@ export function RequestAQuotePage() {
                     transition: 'background-color 0.15s',
                   }}
                 >
-                  {submitting ? 'Submitting…' : 'Submit Quote Request'}
+                  {submitting ? 'Checking…' : 'Preview Submission'}
                 </button>
                 <p style={{ fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-caption)', fontWeight: 300, color: 'var(--binge-text-muted)', lineHeight: 1.5, margin: 0, maxWidth: '320px' }}>
-                  Your enquiry is sent directly to our technical team. We do not share your details with third parties.
+                  Test mode only: no enquiry is sent and no contact details are stored.
                 </p>
               </div>
             </div>
