@@ -6,12 +6,12 @@ import { ChevronRight, ChevronDown, X, ArrowRight } from 'lucide-react';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-type Material     = 'Aluminium' | 'Stainless Steel' | 'Solid Wood' | 'WPC';
-type Installation = 'Surface-Mounted' | 'Recessed' | 'Clip-on';
-type Application  = 'Residential' | 'Hospitality' | 'Workplace' | 'Healthcare' | 'Commercial';
-type Category     = 'Aluminium' | 'Recessed' | 'LED' | 'Solid Wood' | 'Stainless Steel' | 'WPC' | 'Trims';
+export type Material     = 'Aluminium' | 'Stainless Steel' | 'Solid Wood' | 'WPC';
+export type Installation = 'Surface-Mounted' | 'Recessed' | 'Clip-on';
+export type Application  = 'Residential' | 'Hospitality' | 'Workplace' | 'Healthcare' | 'Commercial';
+export type Category     = 'Aluminium' | 'Recessed' | 'LED' | 'Solid Wood' | 'Stainless Steel' | 'WPC' | 'Trims';
 
-type Product = {
+export type Product = {
   code: string;
   name: string;
   desc: string;
@@ -22,6 +22,7 @@ type Product = {
   img: string;
   alt: string;
   slug?: string; // set when a dedicated product page exists
+  specificationStatus: 'Awaiting factory confirmation';
 };
 
 // ─── Filter Options ───────────────────────────────────────────────────────────
@@ -35,7 +36,7 @@ const APPLICATIONS:  ('All' | Application)[]   = ['All', 'Residential', 'Hospita
 
 // ─── Product Data ─────────────────────────────────────────────────────────────
 
-const PRODUCTS: Product[] = [
+const RAW_PRODUCTS: Omit<Product, 'specificationStatus'>[] = [
   { code: 'AS-CR', name: 'Crystal-Face Aluminium Skirting', desc: 'Decorative aluminium skirting family with a polished face treatment and clip-on installation.', material: 'Aluminium', installation: 'Clip-on', applications: ['Residential', 'Hospitality'], category: 'Aluminium', img: '/images/products/as-crystal.jpg', alt: 'Crystal-face aluminium skirting installed at a wall and floor junction' },
   { code: 'AS-MD', name: 'Morandi Finish Aluminium Skirting', desc: 'Muted colour aluminium range developed for contemporary residential and interior fit-out projects.', material: 'Aluminium', installation: 'Clip-on', applications: ['Residential', 'Workplace', 'Hospitality'], category: 'Aluminium', img: '/images/products/as-morandi.jpg', alt: 'Morandi colour aluminium skirting in a modern interior' },
   { code: 'AS-WU', name: 'Woodgrain Upturned Aluminium Skirting', desc: 'Wood-effect aluminium face with a raised upper edge for a more decorative wall transition.', material: 'Aluminium', installation: 'Clip-on', applications: ['Residential', 'Hospitality'], category: 'Aluminium', img: '/images/products/as-woodgrain-upturned.jpg', alt: 'Woodgrain aluminium skirting with an upturned top edge' },
@@ -64,6 +65,11 @@ const PRODUCTS: Product[] = [
   { code: 'TR-FC', name: 'F / C-Shaped Aluminium Trim', desc: 'F- and C-shaped aluminium finishing profiles for tile and panel edge conditions.', material: 'Aluminium', installation: 'Surface-Mounted', applications: ['Residential', 'Commercial'], category: 'Trims', img: '/images/products/tr-fc-edge.jpg', alt: 'Black C-shaped aluminium finishing trim with profile dimensions' },
   { code: 'TR-TU', name: 'T / U-Shaped Aluminium Transition Trim', desc: 'T- and U-shaped transition profiles for joining and finishing adjacent surface materials.', material: 'Aluminium', installation: 'Surface-Mounted', applications: ['Residential', 'Commercial', 'Hospitality'], category: 'Trims', img: '/images/products/tr-tu-transition.jpg', alt: 'Black T-shaped aluminium transition trim with profile dimensions' },
 ];
+
+export const PRODUCT_CATALOGUE: Product[] = RAW_PRODUCTS.map(product => ({
+  ...product,
+  specificationStatus: 'Awaiting factory confirmation',
+}));
 
 // ─── FilterSelect ─────────────────────────────────────────────────────────────
 
@@ -194,7 +200,7 @@ export function ProductsPage() {
     setFilterInstallation('All'); setFilterApplication('All');
   };
 
-  const filtered = useMemo(() => PRODUCTS.filter(p => {
+  const filtered = useMemo(() => PRODUCT_CATALOGUE.filter(p => {
     const catOk  = activeCat          === 'All' || p.category     === activeCat;
     const matOk  = filterMaterial     === 'All' || p.material      === filterMaterial;
     const instOk = filterInstallation === 'All' || p.installation  === filterInstallation;

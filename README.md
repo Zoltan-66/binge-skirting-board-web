@@ -66,6 +66,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) and [docs/development-workflow.md](docs/d
 
 - [Product taxonomy](docs/product-taxonomy.md)
 - [Content model](docs/content-model.md)
+- [Product specification approval workbook](docs/product-specification-workbook.md)
 - [Architecture](docs/architecture.md)
 - [Design benchmarks](docs/design-benchmarks.md)
 - [Roadmap](docs/roadmap.md)
