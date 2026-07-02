@@ -1,6 +1,9 @@
 "use client";
 
+import { useRef } from 'react';
 import { Link } from '@/lib/router-compat';
+import { useBingeSectionMotion } from './useBingeSectionMotion';
+import { useI18n } from '@/lib/i18n';
 
 /*
  * FlagshipSection stacks on mobile: text → wood photograph.
@@ -34,8 +37,12 @@ const darkBtn = (solid: boolean): React.CSSProperties => ({
 });
 
 export function FlagshipSection() {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const { t } = useI18n();
+  useBingeSectionMotion(sectionRef);
+
   return (
-    <section style={{ backgroundColor: 'var(--binge-dark)', overflow: 'hidden' }}>
+    <section ref={sectionRef} style={{ backgroundColor: 'var(--binge-dark)', overflow: 'hidden' }}>
       <div style={{ maxWidth: 'var(--binge-content-max)', margin: '0 auto' }}>
 
         {/* ── Stacks on mobile, side-by-side on lg ── */}
@@ -49,30 +56,32 @@ export function FlagshipSection() {
             justifyContent: 'center',
             gap: '28px',
           }}>
-            <span style={{
-              fontFamily: 'var(--binge-font)',
-              fontSize: 'var(--binge-size-label)',
-              fontWeight: 700,
-              color: 'var(--binge-orange)',
-              letterSpacing: 'var(--binge-tracking-label)',
-              textTransform: 'uppercase',
-            }}>
-              Featured System — WS-TG
-            </span>
+            <div data-tour="flagship-system" style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
+              <span data-binge-reveal style={{
+                fontFamily: 'var(--binge-font)',
+                fontSize: 'var(--binge-size-label)',
+                fontWeight: 700,
+                color: 'var(--binge-orange)',
+                letterSpacing: 'var(--binge-tracking-label)',
+                textTransform: 'uppercase',
+              }}>
+                {t('featuredSystem')}
+              </span>
 
-            <h2 style={{
-              fontFamily: 'var(--binge-font)',
-              fontSize: 'var(--binge-size-display-md)',
-              fontWeight: 700,
-              color: '#ffffff',
-              lineHeight: 'var(--binge-lh-heading)',
-              margin: 0,
-              letterSpacing: '-0.02em',
-            }}>
-              TG Clip-On Solid Wood Skirting System
-            </h2>
+              <h2 data-binge-reveal style={{
+                fontFamily: 'var(--binge-font)',
+                fontSize: 'var(--binge-size-display-md)',
+                fontWeight: 700,
+                color: '#ffffff',
+                lineHeight: 'var(--binge-lh-heading)',
+                margin: 0,
+                letterSpacing: '-0.02em',
+              }}>
+                {t('featuredTitle')}
+              </h2>
+            </div>
 
-            <p style={{
+            <p data-binge-reveal style={{
               fontFamily: 'var(--binge-font)',
               fontSize: 'var(--binge-size-body-lg)',
               fontWeight: 300,
@@ -86,7 +95,7 @@ export function FlagshipSection() {
 
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {BENEFITS.map((b, i) => (
-                <li key={i} style={{
+                <li key={i} data-binge-reveal style={{
                   fontFamily: 'var(--binge-font)',
                   fontSize: 'var(--binge-size-body)',
                   fontWeight: 300,
@@ -102,7 +111,7 @@ export function FlagshipSection() {
               ))}
             </ul>
 
-            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+            <div data-binge-reveal style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
               <Link to="/products/tg-clip-on-solid-wood-skirting-system" style={darkBtn(true)}>View TG System</Link>
               <a href="mailto:samples@binge-profiles.com?subject=WS-TG Sample Request" style={darkBtn(false)}>Request a Sample</a>
             </div>
@@ -110,7 +119,7 @@ export function FlagshipSection() {
 
           {/* ── Wood photograph — always visible, never under text ──
                Mobile: 260px below text. Desktop: fills full right column. */}
-          <div style={{ position: 'relative', overflow: 'hidden', minHeight: '260px' }}>
+          <div data-binge-media style={{ position: 'relative', overflow: 'hidden', minHeight: '260px' }}>
             <img
               src="/images/products/ws-tg-scene.jpg"
               alt="TG clip-on solid wood skirting system installation sequence"

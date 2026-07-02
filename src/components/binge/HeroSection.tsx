@@ -1,5 +1,10 @@
 "use client";
 
+import { useRef } from 'react';
+import { useBingeSectionMotion } from './useBingeSectionMotion';
+import { useI18n } from '@/lib/i18n';
+import { Link } from '@/lib/router-compat';
+
 /*
  * Hero uses a grid that stacks on mobile:
  *   - Row 1: dark text panel (full width)
@@ -29,8 +34,12 @@ const ctaBase: React.CSSProperties = {
 };
 
 export function HeroSection() {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const { t } = useI18n();
+  useBingeSectionMotion(sectionRef, { hero: true });
+
   return (
-    <section style={{ backgroundColor: 'var(--binge-dark)', overflow: 'hidden' }}>
+    <section ref={sectionRef} style={{ backgroundColor: 'var(--binge-dark)', overflow: 'hidden' }}>
       <div style={{ maxWidth: 'var(--binge-content-max)', margin: '0 auto' }}>
 
         {/* ── Stacks (text → photo) on mobile; side-by-side on lg ── */}
@@ -38,7 +47,7 @@ export function HeroSection() {
 
           {/* Text panel */}
           <div style={heroText}>
-            <span style={{
+            <span data-binge-reveal style={{
               fontFamily: 'var(--binge-font)',
               fontSize: 'var(--binge-size-label)',
               fontWeight: 700,
@@ -46,10 +55,10 @@ export function HeroSection() {
               letterSpacing: 'var(--binge-tracking-label)',
               textTransform: 'uppercase',
             }}>
-              Architectural Skirting &amp; Profile Systems
+              {t('heroLabel')}
             </span>
 
-            <h1 style={{
+            <h1 data-binge-reveal style={{
               fontFamily: 'var(--binge-font)',
               fontSize: 'var(--binge-size-display-xl)',
               fontWeight: 700,
@@ -58,10 +67,10 @@ export function HeroSection() {
               margin: 0,
               letterSpacing: '-0.025em',
             }}>
-              Architectural profiles, engineered for modern interiors.
+              {t('heroTitle')}
             </h1>
 
-            <p style={{
+            <p data-binge-reveal style={{
               fontFamily: 'var(--binge-font)',
               fontSize: 'var(--binge-size-body-lg)',
               fontWeight: 300,
@@ -70,37 +79,35 @@ export function HeroSection() {
               margin: 0,
               maxWidth: '420px',
             }}>
-              Aluminium, stainless steel and solid wood skirting systems
-              manufactured for distributors, contractors and OEM projects
-              across Europe, UK, ANZ.
+              {t('heroBody')}
             </p>
 
             {/* ── CTAs — 48px touch targets ── */}
-            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-              <a href="#products" style={{
+            <div data-binge-reveal style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+              <Link to="#products" data-tour="product-entry" style={{
                 ...ctaBase,
                 backgroundColor: 'var(--binge-orange)',
                 color: '#fff',
                 padding: '0 28px',
               }}>
-                Explore Products
-              </a>
-              <a href="/downloads" style={{
+                {t('exploreProducts')}
+              </Link>
+              <Link to="/downloads" style={{
                 ...ctaBase,
                 backgroundColor: 'transparent',
                 color: '#fff',
                 padding: '0 28px',
                 border: '1px solid rgba(255,255,255,0.3)',
               }}>
-                Request a Catalogue
-              </a>
+                {t('requestCatalogue')}
+              </Link>
             </div>
           </div>
 
           {/* ── Photograph — always visible, never under text ──
                Mobile: stacks below text at 300px tall.
                Desktop: fills full right column height. */}
-          <div style={{ position: 'relative', overflow: 'hidden', minHeight: '300px' }}>
+          <div data-binge-media style={{ position: 'relative', overflow: 'hidden', minHeight: '300px' }}>
             <img
               src="https://images.unsplash.com/photo-1771462883654-ed6d8fa42ae7?w=1080&q=80&fit=crop"
               alt="Minimalist interior — dark engineered floor meets a clean white wall junction"
@@ -118,7 +125,7 @@ export function HeroSection() {
       </div>
 
       {/* ── Orange accent rule ── */}
-      <div style={{ height: '3px', backgroundColor: 'var(--binge-orange)' }} />
+      <div data-binge-rule style={{ height: '3px', backgroundColor: 'var(--binge-orange)' }} />
     </section>
   );
 }

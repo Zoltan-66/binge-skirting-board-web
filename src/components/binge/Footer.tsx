@@ -1,5 +1,7 @@
 "use client";
 
+import { localizeHref, useI18n } from '@/lib/i18n';
+
 const COLUMNS = [
   {
     heading: 'Products',
@@ -86,6 +88,21 @@ const footerHref = (label: string) => {
 };
 
 export function Footer() {
+  const { locale } = useI18n();
+  const translations: Partial<Record<typeof locale, Record<string, string>>> = {
+    zh: { Products: '产品', Resources: '资料', Company: '公司', Contact: '联系', 'Aluminium Skirting': '铝合金踢脚线', 'Recessed Systems': '嵌入式系统', 'LED Systems': 'LED 系统', 'Solid Wood': '实木踢脚线', 'Stainless Steel': '不锈钢踢脚线', 'Trims & Profiles': '收边条与型材', 'Product Catalogue': '产品目录', 'Technical Drawings': '技术图纸', 'Installation Guides': '安装指南', 'Test Reports': '测试报告', 'About Factory': '工厂介绍', Applications: '应用场景', 'Zhejiang, China': '中国浙江' },
+    de: { Products: 'Produkte', Resources: 'Unterlagen', Company: 'Unternehmen', Contact: 'Kontakt', 'Aluminium Skirting': 'Aluminium-Sockelleisten', 'Recessed Systems': 'Einbausysteme', 'LED Systems': 'LED-Systeme', 'Solid Wood': 'Massivholz', 'Stainless Steel': 'Edelstahl', 'Trims & Profiles': 'Abschluss- & Profilsysteme', 'Product Catalogue': 'Produktkatalog', 'Technical Drawings': 'Technische Zeichnungen', 'Installation Guides': 'Montageanleitungen', 'Test Reports': 'Prüfberichte', 'About Factory': 'Über das Werk', Applications: 'Anwendungen' },
+    es: { Products: 'Productos', Resources: 'Recursos', Company: 'Empresa', Contact: 'Contacto', 'Aluminium Skirting': 'Rodapiés de aluminio', 'Recessed Systems': 'Sistemas empotrados', 'LED Systems': 'Sistemas LED', 'Solid Wood': 'Madera maciza', 'Stainless Steel': 'Acero inoxidable', 'Trims & Profiles': 'Remates y perfiles', 'Product Catalogue': 'Catálogo de productos', 'Technical Drawings': 'Planos técnicos', 'Installation Guides': 'Guías de instalación', 'Test Reports': 'Informes de ensayo', 'About Factory': 'Nuestra fábrica', Applications: 'Aplicaciones' },
+    fr: { Products: 'Produits', Resources: 'Ressources', Company: 'Entreprise', Contact: 'Contact', 'Aluminium Skirting': 'Plinthes aluminium', 'Recessed Systems': 'Systèmes encastrés', 'LED Systems': 'Systèmes LED', 'Solid Wood': 'Bois massif', 'Stainless Steel': 'Acier inoxydable', 'Trims & Profiles': 'Finitions et profilés', 'Product Catalogue': 'Catalogue produits', 'Technical Drawings': 'Plans techniques', 'Installation Guides': 'Guides de pose', 'Test Reports': 'Rapports d’essai', 'About Factory': 'Notre usine', Applications: 'Applications' },
+  };
+  const label = (value: string) => translations[locale]?.[value] ?? value;
+  const footerCopy = {
+    en: { tagline: 'Profiles Made for Modern Interiors. — Manufactured in Zhejiang, China.', quote: 'Request a Quote', legal: '© 2026 BINGE Architectural Profile Systems. All rights reserved.' },
+    zh: { tagline: '为现代室内空间打造型材。— 中国浙江制造。', quote: '获取报价', legal: '© 2026 BINGE 建筑型材系统。保留所有权利。' },
+    de: { tagline: 'Profile für moderne Innenräume. — Hergestellt in Zhejiang, China.', quote: 'Angebot anfordern', legal: '© 2026 BINGE Architektonische Profilsysteme. Alle Rechte vorbehalten.' },
+    es: { tagline: 'Perfiles para interiores modernos. — Fabricado en Zhejiang, China.', quote: 'Solicitar presupuesto', legal: '© 2026 BINGE Sistemas de perfiles arquitectónicos. Todos los derechos reservados.' },
+    fr: { tagline: 'Des profilés pour les intérieurs modernes. — Fabriqués dans le Zhejiang, en Chine.', quote: 'Demander un devis', legal: '© 2026 BINGE Systèmes de profilés architecturaux. Tous droits réservés.' },
+  }[locale];
   return (
     <footer style={{
       backgroundColor: 'var(--binge-warm-bg)',
@@ -124,11 +141,11 @@ export function Footer() {
               fontWeight: 300,
               color: 'var(--binge-text-muted)',
             }}>
-              Profiles Made for Modern Interiors. — Manufactured in Zhejiang, China.
+              {footerCopy.tagline}
             </div>
           </div>
 
-          <a href="/request-a-quote" style={{
+          <a href={localizeHref('/request-a-quote', locale, true)} style={{
             backgroundColor: 'var(--binge-orange)',
             color: '#fff',
             fontFamily: 'var(--binge-font)',
@@ -144,7 +161,7 @@ export function Footer() {
             borderRadius: 0,
             flexShrink: 0,
           }}>
-            Request a Quote
+            {footerCopy.quote}
           </a>
         </div>
 
@@ -155,15 +172,15 @@ export function Footer() {
         >
           {COLUMNS.map(col => (
             <div key={col.heading}>
-              <span style={colHeadStyle}>{col.heading}</span>
+              <span style={colHeadStyle}>{label(col.heading)}</span>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {col.links.map((link, i) => (
                   <li key={i}>
-                    <a href={footerHref(link)} style={footLinkStyle}
+                    <a href={localizeHref(footerHref(link), locale, true)} style={footLinkStyle}
                       onMouseEnter={e => ((e.target as HTMLElement).style.color = 'var(--binge-text-primary)')}
                       onMouseLeave={e => ((e.target as HTMLElement).style.color = 'var(--binge-text-body)')}
                     >
-                      {link}
+                      {label(link)}
                     </a>
                   </li>
                 ))}
@@ -188,7 +205,7 @@ export function Footer() {
             fontWeight: 400,
             color: 'var(--binge-text-muted)',
           }}>
-            © 2026 BINGE Architectural Profile Systems. All rights reserved.
+            {footerCopy.legal}
           </span>
           <div style={{ display: 'flex', gap: '20px' }}>
             {['Privacy Policy', 'Terms of Use', 'Cookie Settings'].map(l => (
@@ -199,7 +216,7 @@ export function Footer() {
                 color: 'var(--binge-text-muted)',
                 textDecoration: 'none',
               }}>
-                {l}
+                {locale === 'zh' ? ({ 'Privacy Policy': '隐私政策', 'Terms of Use': '使用条款', 'Cookie Settings': 'Cookie 设置' }[l] ?? l) : l}
               </a>
             ))}
           </div>

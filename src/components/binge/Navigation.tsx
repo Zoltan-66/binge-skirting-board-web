@@ -2,9 +2,18 @@
 
 import { useEffect, useState } from 'react';
 import { NavLink, Link } from '@/lib/router-compat';
-import { Menu, X, Search, Globe, ChevronRight } from 'lucide-react';
+import { Menu, X, Search, ChevronRight } from 'lucide-react';
+import { LanguageMenu } from './LanguageMenu';
+import { SearchDialog } from './SearchDialog';
+import { useI18n, type MessageKey } from '@/lib/i18n';
 
-const NAV_LINKS = ['Products', 'Applications', 'OEM / ODM', 'Downloads', 'About'];
+const NAV_LINKS: Array<{ key: MessageKey; to: string }> = [
+  { key: 'products', to: '/products' },
+  { key: 'applications', to: '/applications' },
+  { key: 'oem', to: '/oem-odm' },
+  { key: 'downloads', to: '/downloads' },
+  { key: 'about', to: '/oem-odm#factory' },
+];
 
 const linkStyle: React.CSSProperties = {
   fontFamily: 'var(--binge-font)',
@@ -37,6 +46,8 @@ const orangeBtn: React.CSSProperties = {
 
 export function Navigation() {
   const [open, setOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const { locale, t } = useI18n();
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
@@ -78,18 +89,10 @@ export function Navigation() {
 
           {/* ── Desktop nav ── */}
           <div className="hidden lg:flex items-center gap-8 flex-1 justify-center">
-            {NAV_LINKS.map(l => {
-              const ROUTES: Record<string, string> = {
-                'Products':     '/products',
-                'Applications': '/applications',
-                'OEM / ODM':    '/oem-odm',
-                'Downloads':    '/downloads',
-                'About':        '/oem-odm#factory',
-              };
-              const to = ROUTES[l];
-              return to ? (
+            {NAV_LINKS.map(({ key, to }) => {
+              return (
                 <NavLink
-                  key={l}
+                  key={key}
                   to={to}
                   style={({ isActive }) => ({
                     ...linkStyle,
@@ -97,40 +100,24 @@ export function Navigation() {
                     fontWeight: isActive ? 700 : 400,
                   })}
                 >
-                  {l}
+                  {t(key)}
                 </NavLink>
-              ) : (
-                <a
-                  key={l}
-                  href="#"
-                  style={linkStyle}
-                  onMouseEnter={e => ((e.target as HTMLElement).style.color = 'var(--binge-text-primary)')}
-                  onMouseLeave={e => ((e.target as HTMLElement).style.color = 'var(--binge-text-body)')}
-                >
-                  {l}
-                </a>
               );
             })}
           </div>
 
           {/* ── Desktop actions ── */}
           <div className="hidden lg:flex items-center gap-1 flex-shrink-0">
-            <button style={{
+            <LanguageMenu />
+            <button onClick={() => setSearchOpen(true)} style={{
               background: 'none', border: 'none', cursor: 'pointer',
               color: 'var(--binge-text-muted)', padding: '8px',
               display: 'flex', alignItems: 'center',
-            }} aria-label="Select language">
-              <Globe size={17} />
-            </button>
-            <button style={{
-              background: 'none', border: 'none', cursor: 'pointer',
-              color: 'var(--binge-text-muted)', padding: '8px',
-              display: 'flex', alignItems: 'center',
-            }} aria-label="Search">
+            }} aria-label={locale === 'zh' ? '打开搜索' : 'Open search'} aria-haspopup="dialog">
               <Search size={17} />
             </button>
             <Link to="/request-a-quote" style={{ ...orangeBtn, marginLeft: '12px' }}>
-              Request a Quote
+              {t('quote')}
             </Link>
           </div>
 
@@ -180,7 +167,7 @@ export function Navigation() {
 
           {/* Nav links — 48px min touch targets */}
           <nav style={{ flex: 1 }}>
-            {NAV_LINKS.map(l => {
+            {NAV_LINKS.map(({ key, to }) => {
               const mobileStyle = {
                 fontFamily: 'var(--binge-font)',
                 fontSize: '17px',
@@ -193,17 +180,9 @@ export function Navigation() {
                 justifyContent: 'space-between',
                 alignItems: 'center',
               };
-              const ROUTES: Record<string, string> = {
-                'Products':     '/products',
-                'Applications': '/applications',
-                'OEM / ODM':    '/oem-odm',
-                'Downloads':    '/downloads',
-                'About':        '/oem-odm#factory',
-              };
-              const to = ROUTES[l];
-              return to ? (
+              return (
                 <NavLink
-                  key={l}
+                  key={key}
                   to={to}
                   onClick={() => setOpen(false)}
                   style={({ isActive }) => ({
@@ -212,19 +191,9 @@ export function Navigation() {
                     fontWeight: isActive ? 700 : 400,
                   })}
                 >
-                  {l}
+                  {t(key)}
                   <ChevronRight size={16} style={{ color: 'var(--binge-text-muted)', flexShrink: 0 }} />
                 </NavLink>
-              ) : (
-                <a
-                  key={l}
-                  href="#"
-                  onClick={() => setOpen(false)}
-                  style={{ ...mobileStyle, color: 'var(--binge-text-primary)' }}
-                >
-                  {l}
-                  <ChevronRight size={16} style={{ color: 'var(--binge-text-muted)', flexShrink: 0 }} />
-                </a>
               );
             })}
           </nav>
@@ -256,33 +225,25 @@ export function Navigation() {
                 borderRadius: 0,
               }}
             >
-              Request a Quote
+              {t('quote')}
             </Link>
             <div style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
-              <button style={{
+              <LanguageMenu />
+              <button onClick={() => { setOpen(false); setSearchOpen(true); }} style={{
                 background: 'none', border: 'none', cursor: 'pointer',
                 color: 'var(--binge-text-muted)', padding: '8px',
                 display: 'flex', alignItems: 'center', gap: '6px',
                 fontFamily: 'var(--binge-font)',
                 fontSize: 'var(--binge-size-caption)',
                 fontWeight: 400,
-              }}>
-                <Globe size={15} /> EN
-              </button>
-              <button style={{
-                background: 'none', border: 'none', cursor: 'pointer',
-                color: 'var(--binge-text-muted)', padding: '8px',
-                display: 'flex', alignItems: 'center', gap: '6px',
-                fontFamily: 'var(--binge-font)',
-                fontSize: 'var(--binge-size-caption)',
-                fontWeight: 400,
-              }}>
-                <Search size={15} /> Search
+              }} aria-label={locale === 'zh' ? '打开搜索' : 'Open search'} aria-haspopup="dialog">
+                <Search size={15} /> {locale === 'zh' ? '搜索' : 'Search'}
               </button>
             </div>
           </div>
         </div>
       )}
+      <SearchDialog open={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   );
 }
