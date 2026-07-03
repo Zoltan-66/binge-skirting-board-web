@@ -9,19 +9,12 @@ import { AluminiumSkirtingPage } from "@/features/binge-pages/AluminiumSkirtingP
 import { TGProductPage } from "@/features/binge-pages/TGProductPage";
 import { CatalogueProductPage } from "@/features/binge-pages/CatalogueProductPage";
 import { PRODUCT_CATALOGUE, getProductBySlug } from "@/data/product-catalogue";
+import { localizedStaticSlugs, metadataAlternates, supportedLocales, type SupportedLocale } from "@/lib/seo";
 import type { Metadata } from "next";
 
 type PageProps = { params: Promise<{ locale: string; slug?: string[] }> };
-const supportedLocales = ["en", "zh", "de", "es", "fr"] as const;
 const staticSlugs = [
-  [],
-  ["products"],
-  ["applications"],
-  ["downloads"],
-  ["oem-odm"],
-  ["request-a-quote"],
-  ["products", "aluminum-skirting"],
-  ["products", "tg-clip-on-solid-wood-skirting-system"],
+  ...localizedStaticSlugs,
   ...PRODUCT_CATALOGUE.map(product => ["products", product.slug]),
 ];
 
@@ -38,7 +31,6 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale, slug = [] } = await params;
-  const path = slug.join("/");
   const metadataByLocale: Record<string, { title: string; description: string }> = {
     en: { title: "BINGE Architectural Skirting & Profile Systems", description: "Architectural skirting, trim and profile systems for project, distribution and OEM requirements." },
     zh: { title: "BINGE 建筑踢脚线与型材系统", description: "面向建筑、经销与 OEM 项目的踢脚线、收边条及型材系统。" },
@@ -49,15 +41,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const localizedMetadata = metadataByLocale[locale] ?? metadataByLocale.en;
   return {
     ...localizedMetadata,
-    alternates: {
-      languages: {
-        en: `/en${path ? `/${path}` : ""}`,
-        "zh-CN": `/zh${path ? `/${path}` : ""}`,
-        de: `/de${path ? `/${path}` : ""}`,
-        es: `/es${path ? `/${path}` : ""}`,
-        fr: `/fr${path ? `/${path}` : ""}`,
-      },
-    },
+    alternates: metadataAlternates(slug, locale as SupportedLocale),
   };
 }
 

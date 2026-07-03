@@ -47,6 +47,7 @@ Open <http://localhost:3000>.
 The `/api/rfq` endpoint submits validated RFQs to Zoho CRM Leads. Configure these values locally in `.env.local` and in production as Cloudflare Pages environment variables or secrets:
 
 ```bash
+NEXT_PUBLIC_SITE_URL=https://www.bingeskirtingboard.com
 ZOHO_CLIENT_ID=
 ZOHO_CLIENT_SECRET=
 ZOHO_REFRESH_TOKEN=
@@ -56,6 +57,16 @@ ZOHO_LEADS_MODULE=Leads
 ```
 
 Use the Zoho accounts and API domains for the CRM account region, for example `.com`, `.eu`, or `.com.au`.
+
+## Search indexing
+
+Set `NEXT_PUBLIC_SITE_URL` to the public production origin before building. The value is used for canonical URLs, hreflang alternates, `robots.txt`, and `sitemap.xml`.
+
+After deployment, submit the generated sitemap in Google Search Console:
+
+```text
+https://www.bingeskirtingboard.com/sitemap.xml
+```
 
 ## Validation
 
