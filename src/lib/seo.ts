@@ -19,6 +19,9 @@ export const localizedStaticSlugs = [
   ["downloads"],
   ["oem-odm"],
   ["request-a-quote"],
+  ["privacy-policy"],
+  ["terms-of-use"],
+  ["cookie-settings"],
   ["products", "aluminum-skirting"],
   ["products", "tg-clip-on-solid-wood-skirting-system"],
 ] as const;

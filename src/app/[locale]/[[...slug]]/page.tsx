@@ -5,6 +5,7 @@ import { HomePage } from "@/features/binge-pages/HomePage";
 import { OEMPage } from "@/features/binge-pages/OEMPage";
 import { ProductsPage } from "@/features/binge-pages/ProductsPage";
 import { RequestAQuotePage } from "@/features/binge-pages/RequestAQuotePage";
+import { LegalPage } from "@/features/binge-pages/LegalPage";
 import { CategoryProductsPage } from "@/features/binge-pages/CategoryProductsPage";
 import { CatalogueProductPage } from "@/features/binge-pages/CatalogueProductPage";
 import { PRODUCT_CATALOGUE, PRODUCT_CATEGORY_ROUTES, getProductBySlug, getProductCategoryRoute } from "@/data/product-catalogue";
@@ -57,6 +58,9 @@ export default async function LocalizedPage({ params }: PageProps) {
   if (path === "downloads") return <DownloadsPage />;
   if (path === "oem-odm") return <OEMPage />;
   if (path === "request-a-quote") return <RequestAQuotePage />;
+  if (path === "privacy-policy") return <LegalPage kind="privacy-policy" />;
+  if (path === "terms-of-use") return <LegalPage kind="terms-of-use" />;
+  if (path === "cookie-settings") return <LegalPage kind="cookie-settings" />;
   if (path === "products/accessories") {
     return <CategoryProductsPage slug="trims-profiles" />;
   }

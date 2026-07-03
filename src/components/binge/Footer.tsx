@@ -100,6 +100,15 @@ export function Footer() {
     fr: { Products: 'Produits', Resources: 'Ressources', Company: 'Entreprise', Contact: 'Contact', 'Aluminium Skirting': 'Plinthes aluminium', 'Recessed Systems': 'Systèmes encastrés', 'LED Systems': 'Systèmes LED', 'Solid Wood': 'Bois massif', 'Stainless Steel': 'Acier inoxydable', 'Trims & Profiles': 'Finitions et profilés', 'Product Catalogue': 'Catalogue produits', 'Technical Drawings': 'Plans techniques', 'Installation Guides': 'Guides de pose', 'Test Reports': 'Rapports d’essai', 'About Factory': 'Notre usine', Applications: 'Applications' },
   };
   const label = (value: string) => translations[locale]?.[value] ?? value;
+  const legalLinks = [
+    { label: 'Privacy Policy', href: '/privacy-policy' },
+    { label: 'Terms of Use', href: '/terms-of-use' },
+    { label: 'Cookie Settings', href: '/cookie-settings' },
+  ];
+  const legalLabel = (value: string) => {
+    if (locale !== 'zh') return value;
+    return ({ 'Privacy Policy': '隐私政策', 'Terms of Use': '使用条款', 'Cookie Settings': 'Cookie 设置' }[value] ?? value);
+  };
   const footerCopy = {
     en: { tagline: 'Profiles Made for Modern Interiors. — Manufactured in Zhejiang, China.', quote: 'Request a Quote', legal: '© 2026 BINGE Architectural Profile Systems. All rights reserved.' },
     zh: { tagline: '为现代室内空间打造型材。— 中国浙江制造。', quote: '获取报价', legal: '© 2026 BINGE 建筑型材系统。保留所有权利。' },
@@ -211,16 +220,16 @@ export function Footer() {
           }}>
             {footerCopy.legal}
           </span>
-          <div style={{ display: 'flex', gap: '20px' }}>
-            {['Privacy Policy', 'Terms of Use', 'Cookie Settings'].map(l => (
-              <a key={l} href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(l)}`} style={{
+          <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+            {legalLinks.map(link => (
+              <a key={link.href} href={localizeHref(link.href, locale, true)} style={{
                 fontFamily: 'var(--binge-font)',
                 fontSize: 'var(--binge-size-caption)',
                 fontWeight: 400,
                 color: 'var(--binge-text-muted)',
                 textDecoration: 'none',
               }}>
-                {locale === 'zh' ? ({ 'Privacy Policy': '隐私政策', 'Terms of Use': '使用条款', 'Cookie Settings': 'Cookie 设置' }[l] ?? l) : l}
+                {legalLabel(link.label)}
               </a>
             ))}
           </div>
