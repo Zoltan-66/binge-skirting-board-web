@@ -54,6 +54,14 @@ export function Navigation() {
     return () => { document.body.style.overflow = ''; };
   }, [open]);
 
+  useEffect(() => {
+    const closeNavigation = () => setOpen(false);
+
+    window.addEventListener("binge:close-mobile-navigation", closeNavigation);
+
+    return () => window.removeEventListener("binge:close-mobile-navigation", closeNavigation);
+  }, []);
+
   return (
     <>
       <nav style={{

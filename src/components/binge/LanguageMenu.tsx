@@ -35,11 +35,22 @@ export function LanguageMenu() {
 
   const select = (nextLocale: Locale) => {
     setOpen(false);
+    window.dispatchEvent(new Event("binge:close-mobile-navigation"));
     router.push(pathForLocale(pathname, nextLocale));
   };
 
   return (
     <div ref={rootRef} style={{ position: "relative" }}>
+      <style>{`
+        @media (max-width: 1023px) {
+          .binge-language-menu-panel {
+            bottom: calc(100% + 10px) !important;
+            max-height: min(320px, calc(100dvh - 160px));
+            overflow-y: auto;
+            top: auto !important;
+          }
+        }
+      `}</style>
       <button
         type="button"
         aria-label={t("language")}
@@ -71,7 +82,7 @@ export function LanguageMenu() {
         />
       </button>
       {open && (
-        <div role="menu" aria-label={t("language")} style={{ position: "absolute", right: 0, top: "calc(100% + 10px)", width: "180px", padding: "6px", background: "#fff", border: "1px solid var(--binge-border)", boxShadow: "0 16px 42px rgba(23,27,32,.14)", zIndex: 80 }}>
+        <div className="binge-language-menu-panel" role="menu" aria-label={t("language")} style={{ position: "absolute", right: 0, top: "calc(100% + 10px)", width: "180px", padding: "6px", background: "#fff", border: "1px solid var(--binge-border)", boxShadow: "0 16px 42px rgba(23,27,32,.14)", zIndex: 80 }}>
           {([['en', t('english')], ['zh', t('chinese')], ['de', t('german')], ['es', t('spanish')], ['fr', t('french')]] as const).map(([value, label]) => (
             <button key={value} type="button" role="menuitemradio" aria-checked={locale === value} onClick={() => select(value)} style={{ width: "100%", minHeight: "42px", padding: "0 10px", display: "flex", alignItems: "center", justifyContent: "space-between", background: locale === value ? "var(--binge-warm-bg)" : "transparent", border: 0, color: "var(--binge-text-primary)", cursor: "pointer", fontFamily: "var(--binge-font)", fontSize: "14px" }}>
               {label}{locale === value && <Check size={15} color="var(--binge-orange)" />}
