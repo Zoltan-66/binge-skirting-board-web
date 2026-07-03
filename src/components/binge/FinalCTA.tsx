@@ -40,7 +40,7 @@ export function FinalCTA() {
           textAlign: 'center',
           gap: '24px',
         }}>
-          <h2 data-binge-reveal style={{
+          <h2 data-binge-reveal data-tour="quote-cta-mobile" style={{
             fontFamily: 'var(--binge-font)',
             fontSize: 'var(--binge-size-display-lg)',
             fontWeight: 700,

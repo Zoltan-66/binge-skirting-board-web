@@ -8,6 +8,7 @@ import { type Locale, useI18n } from "@/lib/i18n";
 
 const TOUR_STORAGE_KEY = "binge-guided-tour-seen-v4";
 const tourInstanceKey: Record<Locale, number> = { en: 1, zh: 2, de: 3, es: 4, fr: 5 };
+const MOBILE_TOUR_QUERY = "(max-width: 767px)";
 
 const tourCopy: Record<Locale, {
   steps: Array<Pick<Step, "target" | "placement"> & { title: string; content: string }>;
@@ -76,17 +77,46 @@ export function GuidedTour() {
   const pathname = usePathname();
   const { locale } = useI18n();
   const [run, setRun] = useState(false);
+  const [isMobileTour, setIsMobileTour] = useState(false);
   const isHome = pathname === "/" || /^\/(en|zh|de|es|fr)$/.test(pathname);
 
   const steps = useMemo<Step[]>(
-    () => tourCopy[locale].steps,
-    [locale],
+    () => tourCopy[locale].steps.map(step => ({
+      ...step,
+      placement: isMobileTour ? "bottom" : step.placement,
+      target: isMobileTour && step.target === '[data-tour="quote-cta"]'
+        ? '[data-tour="quote-cta-mobile"]'
+        : step.target,
+    })),
+    [isMobileTour, locale],
   );
   const controls = tourCopy[locale].controls;
 
   const startTour = useCallback(() => {
     setRun(true);
   }, []);
+
+  useEffect(() => {
+    const media = window.matchMedia(MOBILE_TOUR_QUERY);
+    const updateMobileTour = () => setIsMobileTour(media.matches);
+
+    updateMobileTour();
+    media.addEventListener("change", updateMobileTour);
+
+    return () => media.removeEventListener("change", updateMobileTour);
+  }, []);
+
+  useEffect(() => {
+    const tourIsActive = run && isHome;
+
+    document.documentElement.classList.toggle("binge-tour-active", tourIsActive);
+    document.documentElement.style.scrollBehavior = tourIsActive ? "auto" : "";
+
+    return () => {
+      document.documentElement.classList.remove("binge-tour-active");
+      document.documentElement.style.scrollBehavior = "";
+    };
+  }, [isHome, run]);
 
   useEffect(() => {
     if (!isHome) {
@@ -119,6 +149,31 @@ export function GuidedTour() {
   }
 
   return (
+    <>
+      <style>{`
+        @media (max-width: 767px) {
+          html.binge-tour-active .react-joyride__floater {
+            bottom: max(16px, env(safe-area-inset-bottom)) !important;
+            left: 16px !important;
+            max-width: calc(100vw - 32px) !important;
+            position: fixed !important;
+            right: 16px !important;
+            top: auto !important;
+            transform: none !important;
+            width: calc(100vw - 32px) !important;
+          }
+
+          html.binge-tour-active .react-joyride__tooltip {
+            max-height: min(48vh, 360px);
+            overflow-y: auto;
+            width: 100% !important;
+          }
+
+          html.binge-tour-active .react-joyride__arrow {
+            display: none !important;
+          }
+        }
+      `}</style>
       <Joyride
         key={tourInstanceKey[locale]}
         continuous
@@ -138,15 +193,15 @@ export function GuidedTour() {
           backgroundColor: "#ffffff",
           overlayColor: "rgba(23, 27, 32, 0.34)",
           primaryColor: "#F28C00",
-          scrollDuration: 450,
-          scrollOffset: 88,
+          scrollDuration: isMobileTour ? 140 : 450,
+          scrollOffset: isMobileTour ? 112 : 88,
           showProgress: true,
           skipBeacon: true,
-          spotlightPadding: 16,
+          spotlightPadding: isMobileTour ? 10 : 16,
           spotlightRadius: 12,
           targetWaitTimeout: 1600,
           textColor: "#222222",
-          width: 390,
+          width: isMobileTour ? "calc(100vw - 32px)" : 390,
           zIndex: 1000,
         }}
         styles={{
@@ -181,7 +236,7 @@ export function GuidedTour() {
             boxSizing: "border-box",
             fontFamily: "var(--binge-font)",
             maxWidth: "calc(100vw - 32px)",
-            width: "390px",
+            width: isMobileTour ? "calc(100vw - 32px)" : "390px",
           },
           tooltipContent: {
             color: "#4A4A4A",
@@ -204,5 +259,6 @@ export function GuidedTour() {
           },
         }}
       />
+    </>
   );
 }
