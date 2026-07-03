@@ -9,12 +9,12 @@ import { useI18n } from '@/lib/i18n';
 const FEATURED_SYSTEMS = [
   {
     code: 'AS-FF',
-    category: 'Surface-Mounted Aluminium',
+    category: 'Surface-Mounted Aluminum',
     desc: 'Clip-on profiles for clean, precise wall-to-floor transitions.',
     slug: '/products/aluminum-skirting',
   },
   {
-    code: 'RS-SM',
+    code: 'RS-SG',
     category: 'Recessed & Shadow Gap',
     desc: 'Invisible skirting systems that create sharp architectural shadow lines.',
     slug: '/products',
@@ -32,13 +32,13 @@ const FEATURED_SYSTEMS = [
     slug: '/products/tg-clip-on-solid-wood-skirting-system',
   },
   {
-    code: 'SS-201N',
+    code: 'SS-IC',
     category: 'Stainless Steel Skirting',
     desc: 'Stainless steel skirting families in several heights and finishes.',
     slug: '/products',
   },
   {
-    code: 'TR-TU',
+    code: 'AT-TU',
     category: 'Trims & Finishing Profiles',
     desc: 'Transition strips, edge trims and architectural finishing details.',
     slug: '/products',

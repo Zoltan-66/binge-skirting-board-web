@@ -7,7 +7,9 @@ export const RFQ_DRAFT_FIELDS = [
   'productCategory',
   'productCode',
   'quantity',
+  'requiredLength',
   'finish',
+  'certificationRequirement',
   'deliveryDate',
   'destinationPort',
 ] as const;

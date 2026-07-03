@@ -5,16 +5,17 @@ import { HomePage } from "@/features/binge-pages/HomePage";
 import { OEMPage } from "@/features/binge-pages/OEMPage";
 import { ProductsPage } from "@/features/binge-pages/ProductsPage";
 import { RequestAQuotePage } from "@/features/binge-pages/RequestAQuotePage";
-import { AluminiumSkirtingPage } from "@/features/binge-pages/AluminiumSkirtingPage";
-import { TGProductPage } from "@/features/binge-pages/TGProductPage";
+import { CategoryProductsPage } from "@/features/binge-pages/CategoryProductsPage";
 import { CatalogueProductPage } from "@/features/binge-pages/CatalogueProductPage";
-import { PRODUCT_CATALOGUE, getProductBySlug } from "@/data/product-catalogue";
+import { PRODUCT_CATALOGUE, PRODUCT_CATEGORY_ROUTES, getProductBySlug, getProductCategoryRoute } from "@/data/product-catalogue";
 import { localizedStaticSlugs, metadataAlternates, supportedLocales, type SupportedLocale } from "@/lib/seo";
 import type { Metadata } from "next";
 
 type PageProps = { params: Promise<{ locale: string; slug?: string[] }> };
 const staticSlugs = [
   ...localizedStaticSlugs,
+  ...PRODUCT_CATEGORY_ROUTES.map(route => ["products", route.slug]),
+  ["products", "accessories"],
   ...PRODUCT_CATALOGUE.map(product => ["products", product.slug]),
 ];
 
@@ -56,10 +57,13 @@ export default async function LocalizedPage({ params }: PageProps) {
   if (path === "downloads") return <DownloadsPage />;
   if (path === "oem-odm") return <OEMPage />;
   if (path === "request-a-quote") return <RequestAQuotePage />;
-  if (path === "products/aluminum-skirting") return <AluminiumSkirtingPage />;
-  if (path === "products/tg-clip-on-solid-wood-skirting-system") return <TGProductPage />;
+  if (path === "products/accessories") {
+    return <CategoryProductsPage slug="trims-profiles" />;
+  }
 
   if (slug.length === 2 && slug[0] === "products") {
+    const categoryRoute = getProductCategoryRoute(slug[1]);
+    if (categoryRoute) return <CategoryProductsPage slug={categoryRoute.slug} />;
     const product = getProductBySlug(slug[1]);
     if (product) return <CatalogueProductPage product={product} />;
   }

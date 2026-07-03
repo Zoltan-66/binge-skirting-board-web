@@ -10,12 +10,12 @@ import {
 test("site search matches product code, taxonomy and Chinese keywords", () => {
   assert.equal(searchSite("WS-TG")[0]?.code, "WS-TG");
   assert.ok(searchSite("recessed").some(item => item.group === "Products"));
-  assert.ok(searchSite("铝合金").some(item => item.category === "Aluminium"));
+  assert.ok(searchSite("铝合金").some(item => item.category === "Surface-Mounted Aluminum"));
   assert.ok(searchSite("安装说明").some(item => item.group === "Technical Resources"));
 });
 
 test("search index is generated from catalogue and resource data", () => {
-  assert.ok(SITE_SEARCH_ITEMS.some(item => item.id === "product-AS-CR"));
+  assert.ok(SITE_SEARCH_ITEMS.some(item => item.id === "product-AS-SC"));
   assert.ok(SITE_SEARCH_ITEMS.some(item => item.id === "resource-1"));
   assert.ok(SITE_SEARCH_ITEMS.some(item => item.id === "page-quote"));
   assert.deepEqual(searchSite("   "), []);

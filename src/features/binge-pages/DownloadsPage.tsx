@@ -5,6 +5,7 @@ import {
   DOWNLOAD_CATEGORIES,
   DOWNLOAD_DOCUMENT_TYPES,
   DOWNLOAD_RESOURCES,
+  DOWNLOAD_AVAILABILITY_GROUPS,
   type DocumentType,
 } from '@/data/download-resources';
 import { Link } from '@/lib/router-compat';
@@ -22,11 +23,22 @@ import {
 } from 'lucide-react';
 
 const DOC_TYPE_ICON: Record<DocumentType, React.FC<{ size?: number; style?: React.CSSProperties }>> = {
-  'Product Catalogue': BookOpen,
-  'Profile Drawing': Ruler,
-  'Installation Instructions': BookMarked,
-  'Test Report': ClipboardCheck,
-  'Packaging Specifications': Package,
+  'Product catalogue': BookOpen,
+  'Category brochure': BookOpen,
+  'System brochure': BookOpen,
+  'Capability guide': ClipboardCheck,
+  'Application guide': BookMarked,
+  'Product datasheet': ClipboardCheck,
+  'Technical drawing': Ruler,
+  'Installation manual': BookMarked,
+  'Packaging specification': Package,
+  'Project form': ClipboardCheck,
+  'Commercial terms': ClipboardCheck,
+  'Test report': ClipboardCheck,
+  'Compliance document': ClipboardCheck,
+  'Material evidence': ClipboardCheck,
+  'OEM drawing': Ruler,
+  'Internal commercial file': Package,
 };
 
 function FilterSelect({
@@ -103,10 +115,10 @@ export function DownloadsPage() {
       const matchSearch =
         !q ||
         resource.title.toLowerCase().includes(q) ||
-        resource.code.toLowerCase().includes(q) ||
-        resource.note.toLowerCase().includes(q);
+        resource.productCodeOrRange.toLowerCase().includes(q) ||
+        resource.buyerFacingNote.toLowerCase().includes(q);
       const matchCat = filterCat === 'All Categories' || resource.category === filterCat;
-      const matchType = filterType === 'All Types' || resource.docType === filterType;
+      const matchType = filterType === 'All Types' || resource.documentType === filterType;
 
       return matchSearch && matchCat && matchType;
     });
@@ -134,7 +146,7 @@ export function DownloadsPage() {
                 display: 'block',
                 marginBottom: '14px',
               }}>
-                Technical Resources
+                Downloads
               </span>
               <h1 style={{
                 fontFamily: 'var(--binge-font)',
@@ -145,7 +157,7 @@ export function DownloadsPage() {
                 margin: 0,
                 letterSpacing: '-0.02em',
               }}>
-                Request catalogue packs,<br />drawings and test data.
+                Product catalogues,<br />technical documents and project resources.
               </h1>
             </div>
             <div style={{ display: 'flex', alignItems: 'flex-end' }}>
@@ -157,10 +169,8 @@ export function DownloadsPage() {
                 lineHeight: 'var(--binge-lh-body)',
                 margin: 0,
               }}>
-                Our final public download library is still being prepared. During
-                pre-launch, BINGE shares tailored document packs after you confirm
-                the product family, target market and project use. This keeps
-                catalogue pages, drawings, test reports and packaging specs accurate.
+                Product catalogues, technical documents and project resources for BINGE
+                skirting boards, recessed systems and architectural profiles.
               </p>
             </div>
           </div>
@@ -178,10 +188,10 @@ export function DownloadsPage() {
           }}>
             <div>
               <div style={{ fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-body)', fontWeight: 700, color: 'var(--binge-text-primary)', marginBottom: '4px' }}>
-                Pre-launch document request mode
+                Document access policy
               </div>
               <div style={{ fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-caption)', fontWeight: 300, color: 'var(--binge-text-body)', lineHeight: 1.5 }}>
-                No placeholder PDF links are shown here. Buyers can request the right technical pack through the RFQ form.
+                Some technical files are available after RFQ submission to ensure the correct product range, material, finish, project specification and market requirement are matched before use.
               </div>
             </div>
             <Link to="/request-a-quote?source=downloads" style={{
@@ -332,7 +342,7 @@ export function DownloadsPage() {
           {filtered.length > 0 ? (
             <div style={{ borderTop: '1px solid var(--binge-border)' }}>
               {filtered.map(resource => {
-                const TypeIcon = DOC_TYPE_ICON[resource.docType];
+                const TypeIcon = DOC_TYPE_ICON[resource.documentType];
 
                 return (
                   <div
@@ -379,7 +389,7 @@ export function DownloadsPage() {
                         lineHeight: 1.5,
                         margin: '0 0 8px',
                       }}>
-                        {resource.note}
+                        {resource.shortDescription}
                       </p>
                       <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
                         <span style={{
@@ -391,7 +401,7 @@ export function DownloadsPage() {
                           padding: '2px 8px',
                           display: 'inline-block',
                         }}>
-                          {resource.docType}
+                          {resource.documentType}
                         </span>
                         <span style={{
                           fontFamily: 'var(--binge-font)',
@@ -401,7 +411,15 @@ export function DownloadsPage() {
                           letterSpacing: '0.06em',
                           textTransform: 'uppercase',
                         }}>
-                          {resource.code}
+                          {resource.productCodeOrRange}
+                        </span>
+                        <span style={{
+                          fontFamily: 'var(--binge-font)',
+                          fontSize: 'var(--binge-size-caption)',
+                          fontWeight: 400,
+                          color: 'var(--binge-text-muted)',
+                        }}>
+                          {resource.buyerFacingNote}
                         </span>
                       </div>
                     </div>
@@ -416,7 +434,7 @@ export function DownloadsPage() {
                       minWidth: '84px',
                       textAlign: 'right',
                     }}>
-                      {resource.formats.join(' / ')}
+                      {resource.fileFormat}
                     </div>
 
                     <div className="hidden md:block" style={{
@@ -429,11 +447,13 @@ export function DownloadsPage() {
                       textAlign: 'right',
                       lineHeight: 1.4,
                     }}>
-                      {resource.availability}
+                      {resource.publicAvailability}
                     </div>
 
                     <Link
-                      to={`/request-a-quote?source=downloads&document=${encodeURIComponent(resource.title)}`}
+                      to={resource.publicAvailability === 'Public download'
+                        ? `/request-a-quote?source=downloads&document=${encodeURIComponent(resource.title)}&access=public-catalogue`
+                        : `/request-a-quote?source=downloads&document=${encodeURIComponent(resource.title)}`}
                       style={{
                         fontFamily: 'var(--binge-font)',
                         fontSize: 'var(--binge-size-label)',
@@ -452,7 +472,7 @@ export function DownloadsPage() {
                         whiteSpace: 'nowrap',
                       }}
                     >
-                      <span className="hidden sm:inline">Request Pack</span>
+                      <span className="hidden sm:inline">{resource.ctaText}</span>
                       <span className="sm:hidden">Request</span>
                     </Link>
                   </div>
@@ -508,7 +528,7 @@ export function DownloadsPage() {
               gap: '8px',
             }}>
               <p style={{ fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-body)', fontWeight: 300, color: 'var(--binge-text-muted)', margin: 0 }}>
-                Can&apos;t find a specific drawing, certificate or catalogue page?
+                Can&apos;t find a specific drawing, catalogue page or project document?
               </p>
               <Link to="/request-a-quote?source=downloads" style={{
                 fontFamily: 'var(--binge-font)',
@@ -561,9 +581,9 @@ export function DownloadsPage() {
                 margin: 0,
                 maxWidth: '480px',
               }}>
-                During pre-launch, document packs are prepared manually so each buyer
-                receives the right catalogue, profile drawings, material data, test
-                reports and packaging specifications for the target market.
+                Document packs are prepared carefully so each buyer receives the right
+                catalogue, profile drawings, material data and packaging specifications
+                for the selected product and target market.
               </p>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'flex-start' }}>
@@ -603,6 +623,27 @@ export function DownloadsPage() {
                 Browse Products
               </Link>
             </div>
+          </div>
+        </div>
+      </section>
+      <section style={{ backgroundColor: 'var(--binge-white)', borderTop: '1px solid var(--binge-border)' }}>
+        <div style={{ maxWidth: 'var(--binge-content-max)', margin: '0 auto', padding: '56px var(--binge-pad-h)' }}>
+          <span style={{ fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-label)', fontWeight: 700, color: 'var(--binge-orange)', letterSpacing: 'var(--binge-tracking-label)', textTransform: 'uppercase' }}>
+            Availability Groups
+          </span>
+          <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 1, background: 'var(--binge-border)', marginTop: 18 }}>
+            {DOWNLOAD_AVAILABILITY_GROUPS.filter(group => group !== 'Needs factory confirmation').map(group => (
+              <div key={group} style={{ background: 'var(--binge-card-bg)', padding: 24 }}>
+                <h3 style={{ margin: '0 0 10px', fontSize: 'var(--binge-size-title-md)', color: 'var(--binge-text-primary)' }}>{group}</h3>
+                <p style={{ margin: 0, color: 'var(--binge-text-body)', lineHeight: 1.6 }}>
+                  {group === 'Public download'
+                    ? 'Public catalogue and overview cards are shown without fake file generation.'
+                    : group === 'Available after RFQ'
+                      ? 'Datasheets, drawings, manuals and commercial packs require project details before release.'
+                      : 'Restricted files are not public downloads and require exact product evidence before use.'}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>

@@ -29,12 +29,12 @@ const PAGE_ITEMS: SearchItem[] = [
   { id: "page-products", title: "Products", description: "Browse BINGE skirting, recessed, LED and architectural profile systems.", category: "Products", tags: ["产品", "踢脚线", "型材", "catalogue"], url: "/products", group: "Pages" },
   { id: "page-applications", title: "Applications", description: "Solutions for residential, hospitality, workplace, healthcare and commercial projects.", category: "Applications", tags: ["应用场景", "住宅", "酒店", "办公", "医疗", "商业"], url: "/applications", group: "Pages" },
   { id: "page-oem", title: "OEM / ODM", description: "Custom profiles, finishes, packaging and manufacturing support.", category: "OEM / ODM", tags: ["定制", "代工", "制造", "factory"], url: "/oem-odm", group: "Pages" },
-  { id: "page-downloads", title: "Downloads", description: "Product catalogues, drawings, installation guides and test reports.", category: "Technical Resources", tags: ["技术资料", "下载", "图纸", "安装说明", "检测报告"], url: "/downloads", group: "Pages" },
+  { id: "page-downloads", title: "Downloads", description: "Product catalogues, drawings, installation guides and project resources.", category: "Technical Resources", tags: ["技术资料", "下载", "图纸", "安装说明", "目录"], url: "/downloads", group: "Pages" },
   { id: "page-quote", title: "Request a Quote", description: "Tell BINGE about your product, quantity and project requirements.", category: "Contact", tags: ["获取报价", "询价", "联系", "project"], url: "/request-a-quote", group: "Pages" },
 ];
 
 const PRODUCT_TAGS: Record<string, string[]> = {
-  Aluminium: ["aluminum", "铝合金"],
+  Aluminum: ["aluminium", "铝合金"],
   "Stainless Steel": ["不锈钢"],
   "Solid Wood": ["实木"],
   WPC: ["木塑"],
@@ -46,11 +46,15 @@ const PRODUCT_TAGS: Record<string, string[]> = {
 };
 
 const DOCUMENT_TAGS: Record<string, string[]> = {
-  "Product Catalogue": ["产品目录"],
-  "Profile Drawing": ["型材图纸", "图纸"],
-  "Installation Instructions": ["安装说明", "安装指南"],
-  "Test Report": ["检测报告"],
-  "Packaging Specifications": ["包装规范"],
+  "Product catalogue": ["产品目录"],
+  "Category brochure": ["产品目录", "分类册"],
+  "System brochure": ["系统册"],
+  "Capability guide": ["定制指南"],
+  "Application guide": ["应用指南"],
+  "Product datasheet": ["规格书"],
+  "Technical drawing": ["型材图纸", "图纸"],
+  "Installation manual": ["安装说明", "安装指南"],
+  "Packaging specification": ["包装规范"],
 };
 
 export const SITE_SEARCH_ITEMS: SearchItem[] = [
@@ -63,9 +67,10 @@ export const SITE_SEARCH_ITEMS: SearchItem[] = [
     tags: [
       product.code,
       product.material,
-      product.installation,
+      product.materialGroup,
+      product.installationMethod,
       ...product.applications,
-      ...(PRODUCT_TAGS[product.material] ?? []),
+      ...(PRODUCT_TAGS[product.materialGroup] ?? []),
       ...(PRODUCT_TAGS[product.installation] ?? []),
       ...(PRODUCT_TAGS[product.category] ?? []),
     ],
@@ -75,10 +80,10 @@ export const SITE_SEARCH_ITEMS: SearchItem[] = [
   ...DOWNLOAD_RESOURCES.map((resource): SearchItem => ({
     id: `resource-${resource.id}`,
     title: resource.title,
-    description: resource.note,
-    category: resource.docType,
-    code: resource.code,
-    tags: [resource.code, resource.category, resource.docType, ...resource.formats, resource.availability, ...(DOCUMENT_TAGS[resource.docType] ?? []), "技术资料", "下载"],
+    description: resource.buyerFacingNote,
+    category: resource.documentType,
+    code: resource.productCodeOrRange,
+    tags: [resource.productCodeOrRange, resource.category, resource.documentType, resource.fileFormat, resource.publicAvailability, ...(DOCUMENT_TAGS[resource.documentType] ?? []), "技术资料", "下载"],
     url: "/downloads",
     group: "Technical Resources",
   })),

@@ -3,10 +3,10 @@ import { CategoryProductsPage } from "@/features/binge-pages/CategoryProductsPag
 import { metadataAlternates } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Aluminium Skirting Systems",
-  alternates: metadataAlternates(["products", "aluminum-skirting"]),
+  title: "Solid Wood Skirting",
+  alternates: metadataAlternates(["products", "solid-wood-skirting"]),
 };
 
 export default function Page() {
-  return <CategoryProductsPage slug="aluminum-skirting" />;
+  return <CategoryProductsPage slug="solid-wood-skirting" />;
 }

@@ -10,11 +10,19 @@ import { translateCopy } from '@/lib/localized-copy';
 // ─── Filter Options ───────────────────────────────────────────────────────────
 
 const CATEGORIES: ('All' | Category)[] = [
-  'All', 'Aluminium', 'Recessed', 'LED', 'Solid Wood', 'Stainless Steel', 'WPC', 'Trims',
+  'All',
+  'Surface-Mounted Aluminum',
+  'Stainless Steel',
+  'Solid Wood',
+  'WPC',
+  'Recessed & Shadow Gap',
+  'LED Skirting',
+  'Plaster-In',
+  'Trims & Profiles',
 ];
-const MATERIALS:     ('All' | Material)[]      = ['All', 'Aluminium', 'Stainless Steel', 'Solid Wood', 'WPC'];
-const INSTALLATIONS: ('All' | Installation)[]  = ['All', 'Surface-Mounted', 'Recessed', 'Clip-on'];
-const APPLICATIONS:  ('All' | Application)[]   = ['All', 'Residential', 'Hospitality', 'Workplace', 'Healthcare', 'Commercial'];
+const MATERIALS:     ('All' | Material)[]      = ['All', 'Aluminum', 'Stainless Steel', 'Solid Wood', 'WPC'];
+const INSTALLATIONS: ('All' | Installation)[]  = ['All', 'Surface-Mounted', 'Recessed', 'Clip-on', 'Adhesive', 'Embedded'];
+const APPLICATIONS:  ('All' | Application)[]   = ['All', 'Residential', 'Hospitality', 'Workplace', 'Commercial'];
 
 // ─── FilterSelect ─────────────────────────────────────────────────────────────
 
@@ -103,7 +111,7 @@ function ProductCard({ p }: { p: Product }) {
           {translateCopy(p.desc, locale)}
         </p>
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '16px' }}>
-          {[p.material, p.installation].map(tag => (
+          {[p.materialGroup, p.installation].map(tag => (
             <span key={tag} style={{
               fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-caption)',
               fontWeight: 400, color: 'var(--binge-text-muted)',
@@ -145,7 +153,7 @@ export function ProductsPage() {
 
   const filtered = useMemo(() => PRODUCT_CATALOGUE.filter(p => {
     const catOk  = activeCat          === 'All' || p.category     === activeCat;
-    const matOk  = filterMaterial     === 'All' || p.material      === filterMaterial;
+    const matOk  = filterMaterial     === 'All' || p.materialGroup  === filterMaterial;
     const instOk = filterInstallation === 'All' || p.installation  === filterInstallation;
     const appOk  = filterApplication  === 'All' || p.applications.includes(filterApplication as Application);
     return catOk && matOk && instOk && appOk;

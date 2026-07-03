@@ -19,7 +19,9 @@ type QuoteFormData = {
   productCategory: string;
   productCode: string;
   quantity: string;
+  requiredLength: string;
   finish: string;
+  certificationRequirement: string;
   deliveryDate: string;
   destinationPort: string;
   message: string;
@@ -37,36 +39,37 @@ const COUNTRIES = [
 ];
 
 const BUSINESS_TYPES = [
-  'Building Material Importer',
-  'Flooring Distributor',
-  'Architect or Interior Designer',
-  'Interior Fit-Out Contractor',
-  'Wholesaler or Stockist',
-  'Property Developer',
-  'Procurement Manager',
-  'End User / Other',
+  'Distributor',
+  'Importer',
+  'Architect',
+  'Contractor',
+  'Project procurement',
+  'OEM / ODM customer',
+  'Other',
 ];
 
 const PRODUCT_CATEGORIES = [
-  'Aluminium Skirting',
-  'Recessed & Shadow Gap Systems',
-  'LED Skirting Systems',
-  'Solid Wood Skirting',
+  'Aluminum Skirting',
   'Stainless Steel Skirting',
+  'Solid Wood Skirting',
   'WPC Skirting',
-  'Trims & Finishing Profiles',
+  'Recessed Skirting',
+  'LED Skirting',
+  'Plaster-In Profiles',
+  'Trims & Profiles',
   'Accessories',
-  'Multiple / Not yet decided',
+  'Custom Profile',
 ];
 
 const CATEGORY_LABELS: Record<Product['category'], string> = {
-  Aluminium: 'Aluminium Skirting',
-  Recessed: 'Recessed & Shadow Gap Systems',
-  LED: 'LED Skirting Systems',
+  'Surface-Mounted Aluminum': 'Aluminum Skirting',
+  'Recessed & Shadow Gap': 'Recessed Skirting',
+  'LED Skirting': 'LED Skirting',
+  'Plaster-In': 'Plaster-In Profiles',
   'Solid Wood': 'Solid Wood Skirting',
   'Stainless Steel': 'Stainless Steel Skirting',
   WPC: 'WPC Skirting',
-  Trims: 'Trims & Finishing Profiles',
+  'Trims & Profiles': 'Trims & Profiles',
 };
 
 const FINISHES = [
@@ -152,8 +155,7 @@ function SuccessState({ onReset }: { onReset: () => void }) {
           fontFamily: 'var(--binge-font)', fontSize: 'var(--binge-size-body-lg)', fontWeight: 300,
           color: 'var(--binge-text-body)', lineHeight: 'var(--binge-lh-body)', margin: '0 0 12px',
         }}>
-          Thanks for sending your project requirements. BINGE will review the RFQ details and follow up
-          by email or WhatsApp if the team needs clarification.
+          Thank you. Our team will review your product range, specification and project requirement before sending the correct catalogue, drawings or quotation.
         </p>
 
         <p style={{
@@ -421,7 +423,7 @@ export function RequestAQuotePage() {
 
                   {/* Business type */}
                   <div>
-                    <label htmlFor="quote-business-type" style={labelStyle}>Business Type {reqStar}</label>
+                    <label htmlFor="quote-business-type" style={labelStyle}>Buyer Type {reqStar}</label>
                     <SelectWrapper error={!!errors.businessType}>
                       <select
                         id="quote-business-type"
@@ -528,15 +530,37 @@ export function RequestAQuotePage() {
                     {errors.quantity && <span id="quote-quantity-error" role="alert" style={errorMsg}>{errors.quantity.message}</span>}
                   </div>
 
+                  {/* Required length */}
+                  <div style={{ marginBottom: '20px' }}>
+                    <label htmlFor="quote-required-length" style={labelStyle}>Required Length <span style={{ fontFamily: 'var(--binge-font)', fontWeight: 300, color: 'var(--binge-text-muted)', fontSize: 'var(--binge-size-caption)' }}>(optional)</span></label>
+                    <input
+                      id="quote-required-length"
+                      type="text" placeholder="e.g. 2.4 m, 2.7 m or project-specific"
+                      {...register('requiredLength')}
+                      style={baseInput}
+                    />
+                  </div>
+
                   {/* Finish */}
-                  <div>
-                    <label htmlFor="quote-finish" style={labelStyle}>Required Finish <span style={{ fontFamily: 'var(--binge-font)', fontWeight: 300, color: 'var(--binge-text-muted)', fontSize: 'var(--binge-size-caption)' }}>(if known)</span></label>
+                  <div style={{ marginBottom: '20px' }}>
+                    <label htmlFor="quote-finish" style={labelStyle}>Finish / Colour Requirement <span style={{ fontFamily: 'var(--binge-font)', fontWeight: 300, color: 'var(--binge-text-muted)', fontSize: 'var(--binge-size-caption)' }}>(if known)</span></label>
                     <SelectWrapper>
                       <select id="quote-finish" {...register('finish')} style={baseSelect} defaultValue="">
                         <option value="">Not yet decided</option>
                         {FINISHES.map(f => <option key={f} value={f}>{f}</option>)}
                       </select>
                     </SelectWrapper>
+                  </div>
+
+                  {/* Certification requirement */}
+                  <div>
+                    <label htmlFor="quote-certification" style={labelStyle}>Certification Requirement <span style={{ fontFamily: 'var(--binge-font)', fontWeight: 300, color: 'var(--binge-text-muted)', fontSize: 'var(--binge-size-caption)' }}>(if any)</span></label>
+                    <input
+                      id="quote-certification"
+                      type="text" placeholder="List required market documents or write none"
+                      {...register('certificationRequirement')}
+                      style={baseInput}
+                    />
                   </div>
                 </div>
 
@@ -556,7 +580,7 @@ export function RequestAQuotePage() {
 
                   {/* Destination port */}
                   <div style={{ marginBottom: '20px' }}>
-                    <label htmlFor="quote-destination" style={labelStyle}>Destination Port {reqStar}</label>
+                    <label htmlFor="quote-destination" style={labelStyle}>Destination Port / Country {reqStar}</label>
                     <input
                       id="quote-destination"
                       type="text" placeholder="e.g. Felixstowe, UK or Melbourne, AUS"

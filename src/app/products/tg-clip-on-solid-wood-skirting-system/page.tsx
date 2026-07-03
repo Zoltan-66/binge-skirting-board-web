@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
-import { TGProductPage } from "@/features/binge-pages/TGProductPage";
+import { notFound } from "next/navigation";
+import { CatalogueProductPage } from "@/features/binge-pages/CatalogueProductPage";
+import { getProductBySlug } from "@/data/product-catalogue";
 import { metadataAlternates } from "@/lib/seo";
 
 export const metadata: Metadata = {
@@ -8,5 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <TGProductPage />;
+  const product = getProductBySlug("tg-clip-on-solid-wood-skirting-system");
+  if (!product) notFound();
+  return <CatalogueProductPage product={product} />;
 }

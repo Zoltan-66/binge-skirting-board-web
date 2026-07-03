@@ -36,7 +36,7 @@ const primaryButton: React.CSSProperties = {
 
 function relatedProducts(product: Product) {
   const sameCategory = PRODUCT_CATALOGUE.filter(item => item.code !== product.code && item.category === product.category);
-  const fallback = PRODUCT_CATALOGUE.filter(item => item.code !== product.code && item.material === product.material);
+  const fallback = PRODUCT_CATALOGUE.filter(item => item.code !== product.code && item.materialGroup === product.materialGroup);
   return [...sameCategory, ...fallback]
     .filter((item, index, items) => items.findIndex(candidate => candidate.code === item.code) === index)
     .slice(0, 3);
@@ -77,10 +77,12 @@ export function CatalogueProductPage({ product }: { product: Product }) {
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', borderTop: '1px solid var(--binge-border)', borderLeft: '1px solid var(--binge-border)', marginBottom: 28 }}>
               {[
-                ['Material', product.material],
-                ['Installation', product.installation],
+                ['Material', product.safeMaterial],
+                ['Installation', product.installationMethod],
                 ['Applications', product.applications.join(', ')],
-                ['Specifications', 'Confirmed per project'],
+                ['Dimensions', product.publicDimensions],
+                ['Finish / colour', product.publicFinishes],
+                ['Spec status', product.specificationStatus],
               ].map(([key, value]) => (
                 <div key={key} style={{ padding: '16px 18px', borderRight: '1px solid var(--binge-border)', borderBottom: '1px solid var(--binge-border)' }}>
                   <span style={{ ...label, display: 'block', fontSize: 'var(--binge-size-caption)', marginBottom: 6 }}>{key}</span>
@@ -90,9 +92,12 @@ export function CatalogueProductPage({ product }: { product: Product }) {
             </div>
 
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-              <Link to={quoteHref} style={primaryButton}>Request a quote <ArrowRight size={16} /></Link>
+              <Link to={`${quoteHref}&request=specification`} style={primaryButton}>Request Specification <ArrowRight size={16} /></Link>
               <Link to="/downloads" style={{ ...primaryButton, color: 'var(--binge-text-primary)', background: 'transparent', border: '1px solid var(--binge-border)' }}>
                 Technical documents <FileText size={16} />
+              </Link>
+              <Link to={`${quoteHref}&request=sample`} style={{ ...primaryButton, color: 'var(--binge-text-primary)', background: 'transparent', border: '1px solid var(--binge-border)' }}>
+                Request a Sample
               </Link>
             </div>
           </div>
@@ -108,11 +113,11 @@ export function CatalogueProductPage({ product }: { product: Product }) {
                 Project-ready information, confirmed before quotation.
               </h2>
               <p style={{ margin: 0, maxWidth: 620, color: 'rgba(255,255,255,0.7)', lineHeight: 1.75, fontWeight: 300 }}>
-                Exact dimensions, lengths, finishes, accessories, packing and compliance documents are matched to the selected factory configuration. This prevents provisional catalogue information from being mistaken for an approved project specification.
+                Detailed dimensions, finish codes and section drawings are available after factory confirmation. Certification and test reports are available only when matched to the exact product and project requirement.
               </p>
             </div>
             <div style={{ borderTop: '1px solid rgba(255,255,255,0.18)' }}>
-              {['Profile drawing and dimensions', 'Available finishes and accessories', 'Packing, MOQ and production lead time', 'Current test reports and compliance documents'].map(item => (
+              {['Profile drawing and dimensions', 'Available finishes and accessories', 'Packing, MOQ and production lead time', 'Project-specific document review'].map(item => (
                 <div key={item} style={{ display: 'flex', gap: 14, alignItems: 'center', padding: '18px 0', borderBottom: '1px solid rgba(255,255,255,0.18)' }}>
                   <Check size={17} color="var(--binge-orange)" />
                   <span style={{ color: 'rgba(255,255,255,0.88)' }}>{item}</span>

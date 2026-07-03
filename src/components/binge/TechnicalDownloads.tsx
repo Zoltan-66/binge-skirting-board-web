@@ -8,12 +8,12 @@ import { useI18n } from '@/lib/i18n';
 import { Link } from '@/lib/router-compat';
 
 const DOCS = FEATURED_DOWNLOAD_RESOURCES.map(type => {
-  const representative = DOWNLOAD_RESOURCES.find(resource => resource.docType === type);
+  const representative = DOWNLOAD_RESOURCES.find(resource => resource.documentType === type);
 
   return {
     type,
-    desc: representative?.note ?? '',
-    status: representative?.availability ?? 'Available on request',
+    desc: representative?.shortDescription ?? '',
+    status: representative?.publicAvailability ?? 'Available after RFQ',
   };
 });
 
@@ -72,7 +72,7 @@ export function TechnicalDownloads() {
             }}>
               The public download library is being prepared. Pre-launch document packs
               are shared on request so distributors receive the correct drawings,
-              catalogue pages and compliance references for their market.
+              catalogue pages and project resources for their market.
             </p>
           </div>
           <Link to="/downloads" data-binge-reveal style={{

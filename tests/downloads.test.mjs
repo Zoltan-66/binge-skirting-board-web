@@ -15,7 +15,7 @@ test("pre-launch downloads do not advertise fake direct downloads or placeholder
 
   assert.doesNotMatch(combined, /mailto:technical@binge-profiles\.com/);
   assert.doesNotMatch(combined, /Updated (Jan|Feb|Mar|Apr|May|Jun) 2025/);
-  assert.match(combined, /pre-launch/i);
+  assert.match(combined, /RFQ/i);
   assert.match(combined, /request-a-quote\?source=downloads/);
 });
 
@@ -23,10 +23,10 @@ test("download resource data is request-oriented and complete enough for filteri
   const source = await readFile(downloadResources, "utf8");
 
   assert.match(source, /DOWNLOAD_RESOURCES/);
-  assert.match(source, /Product Catalogue/);
-  assert.match(source, /Profile Drawing/);
-  assert.match(source, /Installation Instructions/);
-  assert.match(source, /Test Report/);
-  assert.match(source, /Packaging Specifications/);
-  assert.match(source, /Available on request|In preparation|Project-specific/);
+  assert.match(source, /Product catalogue/);
+  assert.match(source, /Technical drawing/);
+  assert.match(source, /Installation manual/);
+  assert.match(source, /Test report/);
+  assert.match(source, /Packaging specification/);
+  assert.match(source, /Public download|Available after RFQ|Internal \/ project only/);
 });
