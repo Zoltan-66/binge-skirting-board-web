@@ -4,7 +4,7 @@ import { localizeHref, useI18n } from '@/lib/i18n';
 
 const WHATSAPP_LABEL = '+44 7879 937232';
 const WHATSAPP_HREF = 'https://wa.me/447879937232';
-const CONTACT_EMAIL = 'info@bingeskirtingboard.com';
+const CONTACT_EMAIL = 'ZedongHuang@bingeskirtingboard.com';
 
 const COLUMNS = [
   {
